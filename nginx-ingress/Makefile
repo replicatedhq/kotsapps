@@ -2,19 +2,25 @@ SHELL := /bin/bash -o pipefail
 # Makes a new release for Vendor application when new manifests are added. 
 
 # release_channel: The channel and branch where new versions are released. On a new release to this channel, we increment semver
-# channel: The current channel, as identified by the current branch. Note the first character is capitalized (e.g., stable->"Stable")
 # app_slug: The current application slug, as identified by the current subdirectory
 release_channel := "Stable"
-channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 app_slug := "$(shell basename $(CURDIR))"
+
+# channel: The current channel, as identified by the current branch. If provided by environment as GITHUB_BRANCH_NAME, we will use that.  Note the first character is capitalized (e.g., stable->"Stable")
+branch_env := ${GITHUB_BRANCH_NAME}
+ifdef branch_env
+channel := "$(shell ch=$(branch_env);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
+else 
+channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
+endif
 
 # When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
 #    We also push the new latest tag version to git. 
 # If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
 # 
 # With github actions, we have the option of explicitly passing PREVIOUS_TAG as an environment variable. If passed, it will be used for current version.  
-prev_tag := ${PREVIOUS_TAG}
-ifdef pt
+prev_tag_env := ${PREVIOUS_TAG}
+ifdef prev_tag_env
 current_version := ${PREVIOUS_TAG}
 else 
 current_version := "$(shell git describe --tags `git rev-list --tags --max-count=1`)"
