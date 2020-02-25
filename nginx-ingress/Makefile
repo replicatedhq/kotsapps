@@ -11,7 +11,15 @@ app_slug := "$(shell basename $(CURDIR))"
 # When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
 #    We also push the new latest tag version to git. 
 # If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
+# 
+# Note: With github actions, we pass PREVIOUS_TAG as an environment variable, since `git describe` needs to return all tags. 
+prev_tag := ${PREVIOUS_TAG}
+ifdef pt
+current_version := ${PREVIOUS_TAG}
+else 
 current_version := "$(shell git describe --tags `git rev-list --tags --max-count=1`)"
+endif
+
 ifeq ($(channel), $(release_channel))
 version:= "$(shell echo $$(echo $(current_version)) | awk -F. -v OFS=. 'NF==1{print ++$$NF}; NF>1{if(length($$NF+1)>length($$NF))$$(NF-1)++; $$NF=sprintf("%0*d", length($$NF), ($$NF+1)%(10^length($$NF))); print}')"
 else
@@ -22,6 +30,8 @@ release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
 .PHONE: yarg
 yarg: 
 	echo $(channel)
+	echo $(current_version)
+	echo $(version)
 
 .PHONY: deps
 deps:
