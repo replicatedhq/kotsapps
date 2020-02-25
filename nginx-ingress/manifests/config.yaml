@@ -10,7 +10,8 @@ spec:
         - name: builtin_ingress
           type: bool
           title: Built-In Kubernetes Ingress
-          description: Uncheck this box to disable the built-in Kubernetes Ingress configuration. Only uncheck this option if you are prepared to implement a custom ingress for this application. 
+          description:  |
+            Uncheck this box to disable the built-in Kubernetes Ingress configuration. Only uncheck this option if you are prepared to implement a custom ingress for this application. 
           default: "1"
         - name: require_ssl
           title: Require SSL (Disable HTTP)
