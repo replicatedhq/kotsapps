@@ -8,13 +8,13 @@ metadata:
 spec:
   backend:
     serviceName: nginx-app
-    servicePort: 80-80
+    servicePort: port80-80
   rules:
   - http:
       paths:
       - path: /*
         backend:
           serviceName: nginx-app
-          servicePort: 80-80
+          servicePort: port80-80
 
 
