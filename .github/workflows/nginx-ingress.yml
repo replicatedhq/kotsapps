@@ -18,17 +18,11 @@ jobs:
     - uses: actions/checkout@v2
       with: 
         fetch-depth: 0
-    - name: Display the path
-      run: pwd
-      shell: bash
-      working-directory: ${{env.working-directory}}
-    - name: Create a release on Channel associated with the branch
-      run: bash -c ${{env.make-command}}
-      shell: bash
-      working-directory: ${{env.working-directory}}
+    - name: 'Get Previous tag'
+      id: previoustag
+      uses: "WyriHaximus/github-action-get-previous-tag@master"
       env:
-        REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
-        REPLICATED_APP: nginx-ingress
+        GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Create a release on Channel associated with the branch
       run: make release
       shell: bash
@@ -36,6 +30,8 @@ jobs:
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
         REPLICATED_APP: nginx-ingress
+        PREVIOUS_TAG: ${{ steps.previoustag.outputs.tag }}
+
 
 
 
