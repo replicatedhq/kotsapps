@@ -12,8 +12,8 @@ spec:
       - path: /nginx
         backend:
           serviceName: nginx-app
-          servicePort: 80
+          servicePort: http
       - path: /
         backend:
           serviceName: kotsadm
-          servicePort: 3000
+          servicePort: kotsadm-http
