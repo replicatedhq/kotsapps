@@ -16,6 +16,7 @@ jobs:
       make-command: make yarg
     steps:
     - uses: actions/checkout@v2
+      fetch-depth: 5000
     - name: Display the path
       run: pwd
       shell: bash
