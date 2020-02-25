@@ -18,6 +18,10 @@ jobs:
     - uses: actions/checkout@v1
       with: 
         fetch-depth: 0
+    - name: Get branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: get_branch
     - name: Create a release on Channel associated with the branch
       run: make release
       shell: bash
@@ -25,6 +29,7 @@ jobs:
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
         REPLICATED_APP: nginx-ingress
+        GITHUB_BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
 
 
 
