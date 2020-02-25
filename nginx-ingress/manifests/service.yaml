@@ -9,6 +9,7 @@ spec:
   ports:
   - port: 80
     nodePort: 30080
+    protocol: TCP
     name: http
 ---
 apiVersion: v1
@@ -21,5 +22,6 @@ spec:
     app: kotsadm
   ports:
   - port: 3000
+    protocol: TCP
     nodePort: 30880
     name: kotsadm-http

@@ -16,11 +16,11 @@ spec:
   rules:
   - http:
       paths:
-      - path: /*
+      - path: /nginx
         backend:
           serviceName: nginx-app
           servicePort: 80
-      - path: /admin-console
+      - path: /
         backend:
           serviceName: kotsadm
-          servicePort: 8800
+          servicePort: 3000
