@@ -1,7 +1,22 @@
-channel := Unstable
+# Makes a new release for Vendor application when new manifests are added. 
+
+# release_channel: The channel and branch where new versions are released. On a new release to this channel, we increment semver
+# channel: The current channel, as identified by the current branch. Note the first character is capitalized (e.g., stable->"Stable")
+# app_slug: The current application slug, as identified by the current subdirectory
+release_channel := "Stable"
+channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 app_slug := "$(shell basename $(CURDIR))"
-version := "0.1.0-dev-${USER}"
-release_notes := "CLI release by ${USER} on $(shell date)"
+
+# When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
+#    We also push the new latest tag version to git. 
+# If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
+current_version := "$(shell git describe --tags `git rev-list --tags --max-count=1`)"
+ifeq ($(channel), $(release_channel))
+version:= "$(shell echo $$(echo $(current_version)) | awk -F. -v OFS=. 'NF==1{print ++$$NF}; NF>1{if(length($$NF+1)>length($$NF))$$(NF-1)++; $$NF=sprintf("%0*d", length($$NF), ($$NF+1)%(10^length($$NF))); print}')"
+else
+version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
+endif
+release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
 SHELL := /bin/bash -o pipefail
 
 .PHONY: deps
@@ -38,13 +53,15 @@ release: check-api-token check-app deps lint
 		--version $(version) \
 		--release-notes $(release_notes) \
 		--ensure-channel
-
+# Push a new tag if this is a new version. 
+ifeq ($(channel), $(release_channel))
+	git tag $(version)
+	git push origin $(version)
+endif
 
 # Use the current branch name for the channel name, 
 # and use the git SHA for the release version, 
 # adding a "-dirty" suffix to the version label if there are uncomitted changes
 gitsha-release:
-	@$(MAKE) release \
-		channel=$(shell git rev-parse --abbrev-ref HEAD) \
-		version=$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo -n "-dirty")
+	@$(MAKE) release
 
