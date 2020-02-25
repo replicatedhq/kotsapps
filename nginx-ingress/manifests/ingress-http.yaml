@@ -7,7 +7,7 @@ metadata:
     kots.io/placeholder: repl{{ printf "'true'" }}repl{{ ConfigOption "annotations" | nindent 4 }}
 spec:
   backend:
-    serviceName: nginx-app
+    serviceName: kotsadm
     servicePort: port80
 
 
