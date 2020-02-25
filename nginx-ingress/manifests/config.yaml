@@ -24,7 +24,6 @@ spec:
           title: Hostname
           description: |
             Use this field to provide a hostname for your Example Application installation.
-          required: true
           when: '{{repl ConfigOption "require_ssl"}}'
         - name: annotations
           type: textarea
