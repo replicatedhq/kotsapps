@@ -8,7 +8,7 @@ metadata:
 spec:
   backend:
     serviceName: nginx-app
-    servicePort: 80
+    servicePort: port80
 
 
 
