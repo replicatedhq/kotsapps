@@ -8,7 +8,7 @@ metadata:
 spec:
   backend:
     serviceName: nginx-app
-    servicePort: 30080
+    servicePort: 80
   tls:
     - hosts:
         - repl{{ ConfigOption "hostname" }}
