@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     env: 
       working-directory: ./nginx-ingress
+      make-command: make yarg
     steps:
     - uses: actions/checkout@v2
     - name: Display the path
@@ -20,7 +21,7 @@ jobs:
       shell: bash
       working-directory: ${{env.working-directory}}
     - name: Create a release on Channel associated with the branch
-      run: make yarg
+      run: bash -c $${{env.make-command}}
       shell: bash
       working-directory: ${{env.working-directory}}
       env:
