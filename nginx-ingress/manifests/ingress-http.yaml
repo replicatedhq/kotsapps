@@ -9,12 +9,6 @@ spec:
   backend:
     serviceName: nginx-app
     servicePort: port80-80
-  rules:
-  - http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: nginx-app
-          servicePort: port80-80
+
 
 
