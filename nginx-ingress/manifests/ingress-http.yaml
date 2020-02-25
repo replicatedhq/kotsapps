@@ -9,11 +9,11 @@ spec:
   rules:
   - http:
       paths:
-      - path: /nginx
+      - path: /nginx/*
         backend:
           serviceName: nginx-app
           servicePort: http
-      - path: /secure-console
+      - path: /secure-console/*
         backend:
           serviceName: kotsadm
           servicePort: kotsadm-http
