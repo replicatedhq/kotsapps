@@ -6,6 +6,9 @@ metadata:
     kots.io/exclude: 'repl{{ or (ConfigOptionEquals "builtin_ingress" "1" | not) (ConfigOptionEquals "require_ssl" "1") }}'
     kots.io/placeholder: repl{{ printf "'true'" }}repl{{ ConfigOption "annotations" | nindent 4 }}
 spec:
+  backend:
+    serviceName: nginx-app
+    servicePort: 80-80
   rules:
   - http:
       paths:
