@@ -12,7 +12,7 @@ app_slug := "$(shell basename $(CURDIR))"
 #    We also push the new latest tag version to git. 
 # If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
 # 
-# Note: With github actions, we pass PREVIOUS_TAG as an environment variable, since `git describe` needs to return all tags. 
+# With github actions, we have the option of explicitly passing PREVIOUS_TAG as an environment variable. If passed, it will be used for current version.  
 prev_tag := ${PREVIOUS_TAG}
 ifdef pt
 current_version := ${PREVIOUS_TAG}
