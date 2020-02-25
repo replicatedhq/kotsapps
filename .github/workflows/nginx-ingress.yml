@@ -21,6 +21,7 @@ jobs:
       working-directory: ${{env.working-directory}}
     - name: Create a release on Channel associated with the branch
       run: make release
+      shell: bash
       working-directory: ${{env.working-directory}}
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}

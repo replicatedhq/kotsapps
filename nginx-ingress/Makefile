@@ -5,6 +5,7 @@
 # app_slug: The current application slug, as identified by the current subdirectory
 release_channel := "Stable"
 channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
+ch=$(git rev-parse --abbrev-ref HEAD);echo $(tr '[:lower:]' '[:upper:]' <<< ${ch:0:1})${ch:1})
 app_slug := "$(shell basename $(CURDIR))"
 
 # When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
