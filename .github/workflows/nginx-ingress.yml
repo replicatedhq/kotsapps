@@ -21,7 +21,7 @@ jobs:
       shell: bash
       working-directory: ${{env.working-directory}}
     - name: Create a release on Channel associated with the branch
-      run: bash -c $${{env.make-command}}
+      run: bash -c ${{env.make-command}}
       shell: bash
       working-directory: ${{env.working-directory}}
       env:
