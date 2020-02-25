@@ -20,6 +20,10 @@ endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
 SHELL := /bin/bash -o pipefail
 
+.PHONE: yarg
+yarg: 
+	echo $(channel)
+
 .PHONY: deps
 deps:
 	@if [[ -x ../deps/replicated ]]; then exit 0; else \
