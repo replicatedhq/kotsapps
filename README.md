@@ -14,7 +14,7 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 1. Identify the application slug based on the root directory of the application (e.g., /nginx-ingress/, `APP_SLUG=nginx-ingress`)
 2. Use `curl` to perform a `kURL Install` using the name of the application directory (e.g., `curl -sSL https://kurl.sh/$APP_SLUG | sudo bash`)
 
-# List of Applications: 
+# List of Applications:  
 
 * nginx-ingress : Ingress setup to a running instance of NGINX
 
