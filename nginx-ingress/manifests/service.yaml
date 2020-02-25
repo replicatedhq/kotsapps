@@ -12,16 +12,3 @@ spec:
     targetPort: 80
     nodePort: 30080
     protocol: TCP
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: kotsadm
-spec:
-  type: NodePort
-  selector:
-    app: kotsadm
-  ports:
-  - port: 80
-    nodePort: 30880
-    name: kotsadm-http
