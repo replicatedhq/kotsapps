@@ -1,3 +1,4 @@
+SHELL := /bin/bash -o pipefail
 # Makes a new release for Vendor application when new manifests are added. 
 
 # release_channel: The channel and branch where new versions are released. On a new release to this channel, we increment semver
@@ -19,7 +20,6 @@ else
 version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
-SHELL := /bin/bash -o pipefail
 
 .PHONE: yarg
 yarg: 
