@@ -1,0 +1,15 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: example-application-ingress-https
+  annotations:
+    kots.io/exclude: 'repl{{ or (ConfigOptionEquals "enable_ingress" "1" | not) (ConfigOptionEquals "enable_ssl" "1" | not) }}'
+    kots.io/placeholder: repl{{ printf "'true'" }}repl{{ ConfigOption "annotations" | nindent 4 }}
+spec:
+  backend:
+    serviceName: nginx-app
+    servicePort: 30080
+  tls:
+    - hosts:
+        - repl{{ ConfigOption "hostname" }}
+      secretName: kotsadm-tls

@@ -1,0 +1,35 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: example-application
+spec:
+  groups:
+    - name: ingress
+      title: Ingress
+      items:
+        - name: builtin_ingress
+          type: bool
+          title: Built-In Kubernetes Ingress
+          description: |
+            Uncheck this box to disable the built-in Kubernetes Ingress configuration. Only uncheck this option if you are prepared to implement a custom ingress for this application. 
+          default: "1"
+        - name: require_ssl
+          title: Require SSL (Disable HTTP)
+          type: bool
+          description: |
+            If unchecked, HTTP access is enabled. If checked, HTTP is disabled and SSL/HTTPS will be required. Certificate uploaded to Admin Console will be used (See https://kurl.sh/docs/install-with-kurl/setup-tls-certs)
+          default: "0"
+        - name: hostname
+          type: text
+          title: Hostname
+          description: |
+            Use this field to provide a hostname for your Example Application installation.
+          required: true
+          when: '{{repl ConfigOption "require_ssl"}}'
+        - name: annotations
+          type: textarea
+          title: Annotations
+          description: |
+            Use this textarea to provide additional annotations specific to your ingress controller.
+            For example, `kubernetes.io/ingress.class: alb` when using the ALB ingress controller.
+            
