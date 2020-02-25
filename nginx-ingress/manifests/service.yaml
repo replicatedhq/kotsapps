@@ -7,6 +7,28 @@ spec:
   selector:
     app: nginx-app
   ports:
-  - port: 80
+  - name: port80
+    port: 80
     nodePort: 30080
-    name: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx

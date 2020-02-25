@@ -3,8 +3,8 @@ name: nginx-ingress CI
 on:
   push:
     paths:
-    - 'nginx-ingress/**'
-    - '.github/workflows/nginx-ingress.yml'
+    - 'mongodb-mtools/**'
+    - '.github/workflows/mongodb-mtools.yml'
     branches:
       - stable
       - beta
@@ -13,7 +13,7 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     env: 
-      working-directory: ./nginx-ingress
+      working-directory: ./mongodb-mtools
     steps:
     - uses: actions/checkout@v1
       with: 
