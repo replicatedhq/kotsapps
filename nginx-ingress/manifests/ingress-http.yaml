@@ -13,7 +13,7 @@ spec:
         backend:
           serviceName: nginx-app
           servicePort: 80
-      - path: /*
+      - path: /
         backend:
           serviceName: kotsadm
           servicePort: 3000
