@@ -16,7 +16,7 @@ spec:
         backend:
           serviceName: nginx-app
           servicePort: 80
-      - path: /*
+      - path: /admin-console
         backend:
-          serviceName: kurl-proxy
-          servicePort: 8800
+          serviceName: kotsadm
+          servicePort: 3000
