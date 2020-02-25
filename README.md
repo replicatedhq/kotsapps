@@ -17,6 +17,7 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 # List of Applications:  
 
 * nginx-ingress : Ingress setup to a running instance of NGINX
+* mongodb-mtools : Example mongoDB application running custom support analyzers using mtools
 
 # CONTRIBUTING (Developer Setup)
 
@@ -27,6 +28,13 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 5. Set the `REPLICATED_API_TOKEN` in your local environment (e.g., `export REPLICATED_API_TOKEN=...`)
 6. Go to the directory of the desired application (e.g., `nginx-ingress`) and ensure this is working by running `make list-releases`)
 7. To iterate on your application, simply push changes to the `app-slug/manifests` directory. This will initiate a github action to make a new release. The branch name will correspond to the application channel (e.g., `stable`, `unstable` )
+
+## Creating a new kotsapp
+
+1. Create a new directory matching the name of the kotsapp (e.g., /reporoot/newkotsapp)
+2. Create a manifests folder within the directory with initial content. 
+3. Create a workflow matching the name of the kotsapp, ensure it triggers on the appropriate path (e.g., 'newkotsapp/**')
+4. Create a license for all channels in the root of the application directory (License.yaml, License-Unstable.yaml, License-Beta.yaml). 
 
 ## Tools reference
 
