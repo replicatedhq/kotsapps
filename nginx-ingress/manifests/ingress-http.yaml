@@ -8,5 +8,5 @@ metadata:
 spec:
   backend:
     serviceName: kotsadm
-    servicePort: 3000
+    servicePort: 30880
 
