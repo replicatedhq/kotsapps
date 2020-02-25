@@ -9,7 +9,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /yarg
+      - path: /yarg/*
         backend:
           serviceName: nginx-app
           servicePort: 80
