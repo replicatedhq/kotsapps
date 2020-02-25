@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: example-application-ingress-https
+  name: nginx-ingress-http
   annotations:
     kots.io/exclude: 'repl{{ or (ConfigOptionEquals "builtin_ingress" "1" | not) (ConfigOptionEquals "require_ssl" "1" | not) }}'
     kots.io/placeholder: repl{{ printf "'true'" }}repl{{ ConfigOption "annotations" | nindent 4 }}
@@ -16,10 +16,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /nginx
+      - path: /*
         backend:
           serviceName: nginx-app
-          servicePort: 80
+          servicePort: http
       - path: /
         backend:
           serviceName: kotsadm

@@ -7,9 +7,11 @@ spec:
   selector:
     app: nginx-app
   ports:
-  - port: 80
+  - name: 80-80
+    port: 80
+    targetPort: 80
     nodePort: 30080
-    name: http
+    protocol: TCP
 ---
 apiVersion: v1
 kind: Service
