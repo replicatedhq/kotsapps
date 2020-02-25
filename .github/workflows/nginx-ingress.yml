@@ -4,6 +4,7 @@ on:
   push:
     paths:
     - 'nginx-ingress/**'
+    - '.github/workflows/nginx-ingress.yml'
     branches:
       - stable
       - unstable
@@ -11,11 +12,15 @@ jobs:
   create-release:
     runs-on: ubuntu-latest
     env: 
-      working-directory: nginx-ingress
+      working-directory: ./nginx-ingress
     steps:
     - uses: actions/checkout@v2
+    - name: Display the path
+      run: echo $PATH
+      shell: bash
+      working-directory: ${{env.working-directory}}
     - name: Create a release on Channel associated with the branch
-      run: make release
+      shell: bash make release
       working-directory: ${{env.working-directory}}
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
