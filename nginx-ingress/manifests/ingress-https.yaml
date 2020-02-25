@@ -13,3 +13,14 @@ spec:
     - hosts:
         - repl{{ ConfigOption "hostname" }}
       secretName: kotsadm-tls
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: nginx-app
+          servicePort: 80
+      - path: /*
+        backend:
+          serviceName: kurl-proxy
+          servicePort: 8800
