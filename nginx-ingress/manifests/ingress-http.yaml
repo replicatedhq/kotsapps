@@ -13,7 +13,7 @@ spec:
         backend:
           serviceName: nginx-app
           servicePort: http
-      - path: /
+      - path: /secure-console
         backend:
           serviceName: kotsadm
           servicePort: kotsadm-http
