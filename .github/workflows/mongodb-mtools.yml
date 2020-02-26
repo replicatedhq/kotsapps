@@ -29,7 +29,7 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: get_branch
     - name: Create a release on Channel associated with the branch
-      run: make release
+      run: cp ../common/Makefile .; make release
       shell: bash
       working-directory: ${{env.working-directory}}
       env:
