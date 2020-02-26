@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-nginx
+  name: mongodb-mtools
   labels:
-    app: example
-    component: nginx
+    app: mongodb-mtools
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: example
-      component: nginx
+      app: mongodb-mtools
   template:
     metadata:
       labels:
-        app: example
-        component: nginx
+        app: mongodb-mtools
     spec:
       containers:
-        - name: nginx
-          image: nginx
+        - name: mongodb-mtools
+          image: stennie/ubuntu-mtools
           resources:
             limits:
               memory: '256Mi'

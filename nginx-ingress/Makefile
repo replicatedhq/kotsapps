@@ -33,12 +33,6 @@ version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(s
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
 
-.PHONE: yarg
-yarg: 
-	echo $(channel)
-	echo $(current_version)
-	echo $(version)
-
 .PHONY: deps
 deps:
 	@if [[ -x ../deps/replicated ]]; then exit 0; else \
@@ -73,10 +67,12 @@ release: check-api-token check-app deps lint
 		--version $(version) \
 		--release-notes $(release_notes) \
 		--ensure-channel
-# Push a new tag if this is a new version. 
+# Push a new tag if this is a new version on the stable branch
 ifeq ($(channel), $(release_channel))
-	git tag $(version)
-	git push origin $(version)
+	# When present, use token to perform git operations (available in Github Actions)
+	@if [ -z "${GITHUB_TOKEN}" ]; then git remote set-url origin https://${GITHUB_TOKEN}@github.com/replicatedhq/kotsapps.git; fi;
+	git tag $(version) 
+	git push origin $(version); 
 endif
 
 # Use the current branch name for the channel name, 
@@ -84,4 +80,3 @@ endif
 # adding a "-dirty" suffix to the version label if there are uncomitted changes
 gitsha-release:
 	@$(MAKE) release
-
