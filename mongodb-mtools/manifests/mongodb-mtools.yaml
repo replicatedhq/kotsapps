@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-mtools
+  labels:
+    app: mongodb-mtools
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-mtools
+  template:
+    metadata:
+      labels:
+        app: mongodb-mtools
+    spec:
+      containers:
+        - name: mongodb-mtools
+          image: stennie/ubuntu-mtools
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
