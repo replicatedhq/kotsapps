@@ -4,6 +4,7 @@ SHELL := /bin/bash -o pipefail
 # release_channel: The channel and branch where new versions are released. On a new release to this channel, we increment semver
 # app_slug: The current application slug, as identified by the current subdirectory
 release_channel := "Stable"
+unstable_channel := "Untable" # This channel sets current version to include the latest tag on the repo (e.g., "v1.0.1-Unstable-1967267")
 app_slug := "$(shell basename $(CURDIR))"
 
 # channel: The current channel, as identified by the current branch. If provided by environment as GITHUB_BRANCH_NAME, we will use that.  Note the first character is capitalized (e.g., stable->"Stable")
@@ -22,7 +23,8 @@ channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]
 endif
 endif 
 
-# We get the latest version from the latest tag in the repo and use that to set the version on unstable/beta branches (e.g., "v1.0.1-Unstable-1967267"). 
+# We get the latest version from the latest tag in the repo and use that to set the version on unstable branches (e.g., "v1.0.1-Unstable-1967267"). 
+# If the release is on the beta branch (or other branches), we just use the branch name and a changeset hash (e.g., "Beta-1232323")
 # If the release is on the primary release branch (i.e., stable), we use the name of the tag for the version (e.g., v1.0.1). 
 # 
 # With github actions, we have the option of explicitly passing PREVIOUS_TAG as an environment variable. If passed, it will be used for current version.  
@@ -38,9 +40,13 @@ ifeq ($(channel), $(release_channel))
 ifndef tag_env
 $(error Unable to release on stable without tag)
 endif
-else 
-# Beta/Unstable release
+else
+ifeq ($(channel), $(unstable_channel))
+# Unstable release
 version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
+else 
+# Other/beta release
+version:=$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
 
