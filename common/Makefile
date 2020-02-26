@@ -14,9 +14,8 @@ else
 channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 endif
 
-# When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
-#    We also push the new latest tag version to git. 
-# If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
+# We get the latest version from the latest tag in the repo and use that to set the version on unstable/beta branches (e.g., "v1.0.1-Unstable-1967267"). 
+# If the release is on the primary release branch (i.e., stable), we use the name of the tag for the version (e.g., v1.0.1). 
 # 
 # With github actions, we have the option of explicitly passing PREVIOUS_TAG as an environment variable. If passed, it will be used for current version.  
 prev_tag_env := ${PREVIOUS_TAG}
@@ -27,11 +26,25 @@ current_version := "$(shell git describe --tags `git rev-list --tags --max-count
 endif
 
 ifeq ($(channel), $(release_channel))
-version:= "$(shell echo $$(echo $(current_version)) | awk -F. -v OFS=. 'NF==1{print ++$$NF}; NF>1{if(length($$NF+1)>length($$NF))$$(NF-1)++; $$NF=sprintf("%0*d", length($$NF), ($$NF+1)%(10^length($$NF))); print}')"
-else
+# If this make action is in response to a tag, perform a stable release
+tag_env := ${GITHUB_TAG_NAME}
+ifdef tag_env
+channel := $(release_channel)
+version := $(tag_env)
+else 
+$(error Unable to release on stable without tag)
+endif
+else 
+# Beta/Unstable release
 version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
+
+.PHONY: yarg
+yarg: 
+	echo $(tag_env)
+	echo $(channel)
+	echo $(version)
 
 .PHONY: deps
 deps:
@@ -67,13 +80,6 @@ release: check-api-token check-app deps lint
 		--version $(version) \
 		--release-notes $(release_notes) \
 		--ensure-channel
-# Push a new tag if this is a new version on the stable branch
-ifeq ($(channel), $(release_channel))
-	# When present, use token to perform git operations (available in Github Actions)
-	@if [ -z "${GITHUB_TOKEN}" ]; then git remote set-url origin https://${GITHUB_TOKEN}:x-oauth-basic@github.com/replicatedhq/kotsapps.git; fi;
-	git tag $(version) 
-	git push origin $(version); 
-endif
 
 # Use the current branch name for the channel name, 
 # and use the git SHA for the release version, 

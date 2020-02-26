@@ -2,3 +2,5 @@ deps/LICENSE
 deps/README.md
 deps/replicated
 .DS_Store
+nginx-ingress/Makefile
+mongodb-mtools/Makefile
