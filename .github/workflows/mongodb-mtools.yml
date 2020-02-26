@@ -9,6 +9,8 @@ on:
       - stable
       - beta
       - unstable
+    tags: 
+    - 'v*.*.*'
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -18,20 +20,23 @@ jobs:
     - uses: actions/checkout@v1
       with: 
         fetch-depth: 0
+    - name: Get tag name, if specified
+      shell: bash
+      run: if grep -q "/tags/" <<< "${GITHUB_REF}"; then echo ::set-output name=tag::${GITHUB_REF:10}; fi
+      id: get_tag
     - name: Get branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: get_branch
     - name: Create a release on Channel associated with the branch
-      run: make release
+      run: cp ../common/Makefile .; make release
       shell: bash
       working-directory: ${{env.working-directory}}
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
         REPLICATED_APP: nginx-ingress
         GITHUB_BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        GITHUB_TAG_NAME: ${{ steps.get_tag.outputs.tag }}
 
 
 
