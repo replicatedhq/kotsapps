@@ -4,19 +4,28 @@ SHELL := /bin/bash -o pipefail
 # release_channel: The channel and branch where new versions are released. On a new release to this channel, we increment semver
 # app_slug: The current application slug, as identified by the current subdirectory
 release_channel := "Stable"
+unstable_channel := "Untable" # This channel sets current version to include the latest tag on the repo (e.g., "v1.0.1-Unstable-1967267")
 app_slug := "$(shell basename $(CURDIR))"
 
 # channel: The current channel, as identified by the current branch. If provided by environment as GITHUB_BRANCH_NAME, we will use that.  Note the first character is capitalized (e.g., stable->"Stable")
+# If this make action is in response to a tag, perform a stable release (set branch name to "Stable")
+tag_env := ${GITHUB_TAG_NAME}
+ifdef tag_env
+channel := $(release_channel)
+version := $(tag_env)
+else 
 branch_env := ${GITHUB_BRANCH_NAME}
+# We need channel to be uppercase and the branch to be lowercase. Conversion here. 
 ifdef branch_env
 channel := "$(shell ch=$(branch_env);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 else 
 channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 endif
+endif 
 
-# When the release is on the primary release channel/branch (e.g., "Stable"), we get the latest version from the latest tag in the repo and increment the semver version (e.g., "1.0.0" -> "1.0.1, or "1.0" -> "1.1")
-#    We also push the new latest tag version to git. 
-# If the release is not on the primary release branch, our version is based on the latest tag but using the git revision (e.g., something like "1.0.1-Unstable-1967267")
+# We get the latest version from the latest tag in the repo and use that to set the version on unstable branches (e.g., "v1.0.1-Unstable-1967267"). 
+# If the release is on the beta branch (or other branches), we just use the branch name and a changeset hash (e.g., "Beta-1232323")
+# If the release is on the primary release branch (i.e., stable), we use the name of the tag for the version (e.g., v1.0.1). 
 # 
 # With github actions, we have the option of explicitly passing PREVIOUS_TAG as an environment variable. If passed, it will be used for current version.  
 prev_tag_env := ${PREVIOUS_TAG}
@@ -27,17 +36,18 @@ current_version := "$(shell git describe --tags `git rev-list --tags --max-count
 endif
 
 ifeq ($(channel), $(release_channel))
-version:= "$(shell echo $$(echo $(current_version)) | awk -F. -v OFS=. 'NF==1{print ++$$NF}; NF>1{if(length($$NF+1)>length($$NF))$$(NF-1)++; $$NF=sprintf("%0*d", length($$NF), ($$NF+1)%(10^length($$NF))); print}')"
-else
+# If this make action is in response to a tag, perform a stable release
+ifndef tag_env
+$(error Unable to release on stable without tag)
+endif
+else ifeq ($(channel), $(unstable_channel))
+# Unstable release
 version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
+else 
+# Other/beta release
+version:=$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
-
-.PHONE: yarg
-yarg: 
-	echo $(channel)
-	echo $(current_version)
-	echo $(version)
 
 .PHONY: deps
 deps:
@@ -73,15 +83,9 @@ release: check-api-token check-app deps lint
 		--version $(version) \
 		--release-notes $(release_notes) \
 		--ensure-channel
-# Push a new tag if this is a new version. 
-ifeq ($(channel), $(release_channel))
-	git tag $(version)
-	git push origin $(version)
-endif
 
 # Use the current branch name for the channel name, 
 # and use the git SHA for the release version, 
 # adding a "-dirty" suffix to the version label if there are uncomitted changes
 gitsha-release:
 	@$(MAKE) release
-

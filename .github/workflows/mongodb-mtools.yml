@@ -6,8 +6,8 @@ on:
     - 'mongodb-mtools/**'
     - '.github/workflows/mongodb-mtools.yml'
     branches:
-      - beta
       - unstable
+      - beta
     tags: 
     - 'v*.*.*'
 jobs:
