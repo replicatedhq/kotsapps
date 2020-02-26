@@ -6,7 +6,6 @@ on:
     - 'mongodb-mtools/**'
     - '.github/workflows/mongodb-mtools.yml'
     branches:
-      - stable
       - beta
       - unstable
     tags: 
