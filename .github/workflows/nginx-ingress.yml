@@ -6,8 +6,8 @@ on:
     - 'nginx-ingress/**'
     - '.github/workflows/nginx-ingress.yml'
     branches:
-      - beta
       - unstable
+      - beta
     tags:
       - 'v*.*.*'
 jobs:
