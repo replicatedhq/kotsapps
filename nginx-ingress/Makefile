@@ -70,7 +70,7 @@ release: check-api-token check-app deps lint
 # Push a new tag if this is a new version on the stable branch
 ifeq ($(channel), $(release_channel))
 	# When present, use token to perform git operations (available in Github Actions)
-	@if [ -z "${GITHUB_TOKEN}" ]; then git remote set-url origin https://${GITHUB_TOKEN}@github.com/replicatedhq/kotsapps.git; fi;
+	@if [ -z "${GITHUB_TOKEN}" ]; then git remote set-url origin https://${GITHUB_TOKEN}:x-oauth-basic@github.com/replicatedhq/kotsapps.git; fi;
 	git tag $(version) 
 	git push origin $(version); 
 endif
