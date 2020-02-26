@@ -12,17 +12,15 @@ tag_env := ${GITHUB_TAG_NAME}
 ifdef tag_env
 channel := $(release_channel)
 version := $(tag_env)
-branch_env := $(tag_env)
 else 
 branch_env := ${GITHUB_BRANCH_NAME}
-endif 
-
 # We need channel to be uppercase and the branch to be lowercase. Conversion here. 
 ifdef branch_env
 channel := "$(shell ch=$(branch_env);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 else 
 channel := "$(shell ch=$$(git rev-parse --abbrev-ref HEAD);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 endif
+endif 
 
 # We get the latest version from the latest tag in the repo and use that to set the version on unstable/beta branches (e.g., "v1.0.1-Unstable-1967267"). 
 # If the release is on the primary release branch (i.e., stable), we use the name of the tag for the version (e.g., v1.0.1). 
@@ -37,11 +35,7 @@ endif
 
 ifeq ($(channel), $(release_channel))
 # If this make action is in response to a tag, perform a stable release
-tag_env := ${GITHUB_TAG_NAME}
-ifdef tag_env
-channel := $(release_channel)
-version := $(tag_env)
-else 
+ifndef tag_env
 $(error Unable to release on stable without tag)
 endif
 else 
