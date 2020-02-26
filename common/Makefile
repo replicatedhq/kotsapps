@@ -40,8 +40,7 @@ ifeq ($(channel), $(release_channel))
 ifndef tag_env
 $(error Unable to release on stable without tag)
 endif
-else
-ifeq ($(channel), $(unstable_channel))
+else ifeq ($(channel), $(unstable_channel))
 # Unstable release
 version:=$(current_version)-$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 else 
@@ -49,12 +48,6 @@ else
 version:=$(channel)-$(shell git rev-parse HEAD | head -c7)$(shell git diff --no-ext-diff --quiet --exit-code || echo "-dirty")
 endif
 release_notes := "CLI release of $(version) by ${USER} on $(shell date)"
-
-.PHONY: yarg
-yarg: 
-	echo $(tag_env)
-	echo $(channel)
-	echo $(version)
 
 .PHONY: deps
 deps:
