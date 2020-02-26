@@ -1,4 +1,4 @@
-name: nginx-ingress CI
+name: mongodb-mtools CI
 
 on:
   push:
