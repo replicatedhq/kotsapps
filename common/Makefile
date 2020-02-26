@@ -7,7 +7,17 @@ release_channel := "Stable"
 app_slug := "$(shell basename $(CURDIR))"
 
 # channel: The current channel, as identified by the current branch. If provided by environment as GITHUB_BRANCH_NAME, we will use that.  Note the first character is capitalized (e.g., stable->"Stable")
+# If this make action is in response to a tag, perform a stable release (set branch name to "Stable")
+tag_env := ${GITHUB_TAG_NAME}
+ifdef tag_env
+channel := $(release_channel)
+version := $(tag_env)
+branch_env := $(tag_env)
+else 
 branch_env := ${GITHUB_BRANCH_NAME}
+endif 
+
+# We need channel to be uppercase and the branch to be lowercase. Conversion here. 
 ifdef branch_env
 channel := "$(shell ch=$(branch_env);echo $$(tr '[:lower:]' '[:upper:]' <<< $${ch:0:1})$${ch:1})"
 else 
