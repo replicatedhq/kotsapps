@@ -10,7 +10,7 @@ spec:
       items:
         - name: a_bool
           title: a bool field
-          help_text: When enabled we will not change anything, because this is an example
+          help_text: When enabled we will not change anything, because this is an example 
           type: bool
           default: "0"
         - name: a_text
