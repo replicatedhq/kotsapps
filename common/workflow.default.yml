@@ -1,22 +1,22 @@
-name: mongodb-mtools CI
+name: {{app_slug}} CI
 
 on:
   push:
     paths:
-    - 'mongodb-mtools/**'
-    - '.github/workflows/mongodb-mtools.yml'
+    - '{{app_slug}}/**'
+    - '.github/workflows/{{app_slug}}.yml'
     - 'common/Makefile.default'
     - '!**.md'
     branches:
     - "**"
     - "!**-norelease"
-    tags: 
+    tags:
     - 'v[0-9]+.[0-9]+.[0-9]+*'
 jobs:
   create-release:
     runs-on: ubuntu-latest
     env: 
-      working-directory: ./mongodb-mtools
+      working-directory: ./{{app_slug}}
     steps:
     - uses: actions/checkout@v1
       with: 
@@ -35,7 +35,7 @@ jobs:
       working-directory: ${{env.working-directory}}
       env:
         REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
-        REPLICATED_APP: nginx-ingress
+        REPLICATED_APP: {{app_slug}}
         GITHUB_BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
         GITHUB_TAG_NAME: ${{ steps.get_tag.outputs.tag }}
 
