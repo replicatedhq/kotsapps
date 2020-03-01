@@ -5,11 +5,13 @@ on:
     paths:
     - 'nginx-ingress/**'
     - '.github/workflows/nginx-ingress.yml'
+    - 'common/Makefile.default'
+    - '!**.md'
     branches:
-      - unstable
-      - beta
+    - "**"
+    - "!**-norelease"
     tags:
-      - 'v*.*.*'
+    - 'v[0-9]+.[0-9]+.[0-9]+*'
 jobs:
   create-release:
     runs-on: ubuntu-latest
@@ -28,7 +30,7 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: get_branch
     - name: Create a release on Channel associated with the branch
-      run: cp ../common/Makefile .; make release
+      run: cp ../common/Makefile.default ./Makefile; make release
       shell: bash
       working-directory: ${{env.working-directory}}
       env:

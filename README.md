@@ -26,16 +26,15 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 3. Ensure the token has "Write" access or you'll be unable create new releases. 
 4. Configure the `REPLICATED_API_TOKEN` github secret in your forked repository (see [configuring secrets](https://help.github.com/en/github/automating-your-workflow-with-github-actions/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) for more details. 
 5. Set the `REPLICATED_API_TOKEN` in your local environment (e.g., `export REPLICATED_API_TOKEN=...`)
-6. Go to the directory of the desired application (e.g., `nginx-ingress`) and ensure this is working by running `cp ../common/Makefile .; make list-releases`)
-7. To iterate on your application, simply push changes to the repository on the `unstable` or `beta` branches. When changes are detected in the `app-slug/manifests` directory, a github action will initiate to make a new release on the channel of the same name. 
-8. To release a stable version of your application, simply push a new tag starting with `v` (e.g., `v1.0.1`). When this tag is detected, a github action will initiate to make a new release on the "Stable" channel across all applications. 
+6. Go to the directory of the desired application (e.g., `nginx-ingress`) and copy the default makefile to the current directory.
+7. Ensure the CLI is working by running `make list-releases`
+7. To iterate on your application, simply push changes to the repository onto the master branch or a new branch. When changes are detected in the `app-slug/manifests` directory, a github action will initiate to make a new release on the channel of the same name. 
+8. To release a beta version of your application, simply push a new tag to the master branch starting with `v` followed by valid semver format (e.g., `v1.0.1`). Tags that aren't in this format will be ignored. When this tag is detected, a github action will initiate to make a new release on the "Beta" channel across all applications. Alternatively, you can use the built-in semver functionality and run `make tag-next-release`
 
 ## Creating a new kotsapp
 
-1. Create a new directory matching the name of the kotsapp (e.g., /reporoot/newkotsapp)
-2. Create a manifests folder within the directory with initial content. 
-3. Create a workflow matching the name of the kotsapp, ensure it triggers on the appropriate path (e.g., 'newkotsapp/**')
-4. Create a license for all channels in the root of the application directory (License.yaml, License-Unstable.yaml, License-Beta.yaml). 
+1. Run the following script: `\common\init-new-app.sh <app_name>'. This will create a new directory for the app_name and populate with initial content (including github actions workflow). 
+2. In vendor web, create a license for Stable/Beta/Unstable channels and place in the root of the application directory (License.yaml, License-Unstable.yaml, License-Beta.yaml). 
 
 ## Tools reference
 
