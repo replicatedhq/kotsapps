@@ -1,0 +1,15 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: config-sample
+spec:
+  groups:
+    - name: example_settings
+      title: Spline Settings
+      items:
+        - name: replica_count
+          title: Replicas
+          help_text: How many replicas of the Spline Reticulator would you like to run?
+          type: text
+          default: 5
+

@@ -1,0 +1,22 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Preflight
+metadata:
+  name: example-preflight-checks
+spec:
+  collectors:
+    - exec:
+        name: config/replicas.txt
+        collectorName: "config-replica-count"
+        data: |
+          {{repl ConfigOption "replica_count"}}
+
+  analyzers:
+    - regex:
+        collectorName: "config-replica-count"
+        expression: "(?P<Replicas>\d+)"
+        outcomes:
+          - fail:
+              when: "Replicas < 5"
+              message: That's not enough replicas!
+          - pass:
+              message: You've selected at leat 5 replicas
