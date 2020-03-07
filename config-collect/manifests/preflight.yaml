@@ -4,16 +4,14 @@ metadata:
   name: example-preflight-checks
 spec:
   collectors:
-    - exec:
+    - data:
         name: config/replicas.txt
-        collectorName: "config-replica-count"
-        data: |
-          {{repl ConfigOption "replica_count"}}
-
+        data: "1"
   analyzers:
-    - regex:
-        collectorName: "config-replica-count"
-        expression: '(?P<Replicas>\d+)'
+    - textAnalyze:
+        checkName: Replica Count
+        fileName: config/replicas.txt
+        regexGroups: '(?P<Replicas>\d+)'
         outcomes:
           - fail:
               when: "Replicas < 5"
