@@ -6,7 +6,7 @@ spec:
   collectors:
     - data:
         name: config/replicas.txt
-        data: "1"
+        data: '{{repl ConfigOption "replica_count" }}'
   analyzers:
     - textAnalyze:
         checkName: Replica Count
