@@ -11,5 +11,5 @@ spec:
           title: Replicas
           help_text: How many replicas of the Spline Reticulator would you like to run?
           type: text
-          default: 5
+          default: "5"
 

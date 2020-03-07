@@ -13,7 +13,7 @@ spec:
   analyzers:
     - regex:
         collectorName: "config-replica-count"
-        expression: "(?P<Replicas>\d+)"
+        expression: '(?P<Replicas>\d+)'
         outcomes:
           - fail:
               when: "Replicas < 5"
