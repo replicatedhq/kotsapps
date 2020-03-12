@@ -1,0 +1,31 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Preflight
+metadata:
+  name: mongodb-enterprise-operator
+spec:
+  analyzers:
+    - clusterVersion:
+        outcomes:
+          - fail:
+              when: "< 1.13.0"
+              message: The MongoDB Enterprise Operator requires at Kubernetes 1.13.0 or later
+              uri: https://www.kubernetes.io
+          - pass:
+              when: ">= 1.13.0"
+              message: Your cluster meets the recommended and required versions of Kubernetes.
+    - nodeResources:
+        checkName: Total CPU Cores in the cluster is 20 or greater
+        outcomes:
+          - fail:
+              when: "sum(cpuCapacity) < 20"
+              message: The cluster must contain at least 20 cores
+          - pass:
+              message: There are at least 20 cores in the cluster
+    - nodeResources:
+        checkName: Every node in the cluster must have at least 16Gi of memory
+        outcomes:
+          - fail:
+              when: "min(memoryCapacity) >= 16Gi"
+              message: All nodes must have at least 16 GB of memory
+          - pass:
+              message: All nodes have at least 16 GB of memory

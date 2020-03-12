@@ -1,0 +1,15 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - logs:
+        selector:
+          - app=mongodb-enterprise-operator
+        namespace: repl{{ Namespace }}
+        limits:
+          maxAge: 30d
+          maxLines: 10000
