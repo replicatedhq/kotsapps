@@ -33,8 +33,9 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 
 ## Creating a new kotsapp
 
-1. Run the following script: `\common\init-new-app.sh <app_name>'. This will create a new directory for the app_name and populate with initial content (including github actions workflow). 
-2. In vendor web, create a license for Stable/Beta/Unstable channels and place in the root of the application directory (License.yaml, License-Unstable.yaml, License-Beta.yaml). 
+1. Run the following script: `./common/init-new-app.sh <app_name>'. This will create a new directory for the app_name and populate with initial content (including github actions workflow). 
+2. Push the new app to github to create your first release on the 'Unstable' channel: `git push origin master`
+3. In vendor web, create a license for Unstable channel and place in the root of the application directory. Once stable and beta releases are available, you can do the same for those channels as well (License.yaml, License-Unstable.yaml, License-Beta.yaml). 
 
 ## Tools reference
 
