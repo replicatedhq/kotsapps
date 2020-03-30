@@ -3,7 +3,7 @@
 
 # Prerequisites
 
-1. Install the KUDO kubectl plugin. 
+The KUDO kubectl plugin. 
 ```s
 brew tap kudobuilder/tap
 brew install kudo-cli
@@ -16,6 +16,14 @@ brew install kudo-cli
 3. Install to the airgapped VM
 ```s
 curl -sSL https://k8s.kurl.sh/kudo-nginx-operator-austin | sudo bash
+```
+4. Verify you have kudo instances generated: 
+```s
+kubectl kudo get instances -n kudo
+```
+5. Verfy you have two kudo pods: 
+```s
+kubectl get pods -n kudo
 ```
 
 
@@ -31,10 +39,10 @@ NAMESPACE=kudo
 OPERATOR_NAME=first-operator
 
 cd manifests
-k get operators.kudo.dev $OPERATOR_NAME -n $NAMESPACE --export -n $NAMESPACE -o yaml > $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
-TMP_OPVERNAME=$(k get operatorversions.kudo.dev -n kudo -o jsonpath="{.items[?(@.spec.operator.name==\"${OPERATOR_NAME}\")].metadata.name}")
-k get operatorversions.kudo.dev ${TMP_OPVERNAME} --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
-k get instances.kudo.dev ${OPERATOR_NAME}-instance --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+kubectl get operators.kudo.dev $OPERATOR_NAME -n $NAMESPACE --export -n $NAMESPACE -o yaml > $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+TMP_OPVERNAME=$(kubectl get operatorversions.kudo.dev -n kudo -o jsonpath="{.items[?(@.spec.operator.name==\"${OPERATOR_NAME}\")].metadata.name}")
+kubectl get operatorversions.kudo.dev ${TMP_OPVERNAME} --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+kubectl get instances.kudo.dev ${OPERATOR_NAME}-instance --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
 cd ..
 ```
 3. Remove kudo and all yaml from the cluster

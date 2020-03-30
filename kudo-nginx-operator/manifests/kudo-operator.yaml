@@ -62,7 +62,7 @@ spec:
           spec:
             containers:
               - name: nginx
-                image: nginx:{{ .AppVersion }}
+                image: 'repl{{ LocalImageName "nginx:1.7.9" }}'
                 ports:
                   - containerPort: 80
   version: 0.1.0
