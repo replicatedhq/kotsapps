@@ -8,6 +8,11 @@ spec:
       title: My Example Config
       description: Configuration to serve as an example for creating your own
       items:
+        - name: nginx_app_version
+          title: NGINX Image Version
+          type: text
+          default: "1.7.9"
+          required: true
         - name: a_bool
           title: a bool field
           help_text: When enabled we will not change anything, because this is an example
@@ -39,10 +44,6 @@ spec:
         - name: a_label
           title: a label
           type: label
-        - name: a_required_text
-          title: a required text field
-          type: text
-          required: true
         - name: a_templated_text
           title: a text field with a value provided by a template function
           type: text
