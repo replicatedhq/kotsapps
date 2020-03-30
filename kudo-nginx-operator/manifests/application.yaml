@@ -9,6 +9,3 @@ spec:
     links:
       - description: 'Example Application'
         url: "http://example-nginx"
-  additionalImages:
-    - nginx:1.7.9
-    - nginx:latest

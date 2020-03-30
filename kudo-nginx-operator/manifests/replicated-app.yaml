@@ -14,3 +14,5 @@ spec:
       servicePort: 80
       localPort: 8888
       applicationUrl: "http://example-nginx"
+  additionalImages:
+    - nginx:1.7.9
