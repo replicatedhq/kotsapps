@@ -7,18 +7,37 @@
 ```s
 brew tap kudobuilder/tap
 brew install kudo-cli
-``` 
-2. Initialize KUDO and create Kudo manifest (including CRDs): 
-```s
-kubectl kudo init --dry-run --output yaml > ./manifests/kudo.yaml
 ```
-3. Create a VPC in GCE that is airgapped (or close enough, only allowing 22 and 8800 ingress)
-4. Create an instance in GCE that uses the VPC. 
-5. Install to the airgapped VM
+
+
+# Setup
+1. Create a VPC in GCE that is airgapped (or close enough, only allowing 22 and 8800 ingress)
+2. Create an instance in GCE that uses the VPC. 
+3. Install to the airgapped VM
 ```s
 curl -sSL https://k8s.kurl.sh/kudo-nginx-operator-austin | sudo bash
 ```
-6. Create manifests for the operator and deployments
+
+
+# How I generated the Operator YAML using KUDO
+1. Initialize KUDO and create Kudo manifest (including CRDs). Or use what is in repo 
 ```s
-kubectl kudo install ./manifests/kudo-operator --dry-run --output yaml > ./manifests/kudo-sdf.yaml
+kubectl kudo init --dry-run --output yaml > ./manifests/kudo.yaml
+```
+2. Extract the YAML from those manifests (for some reason, kudo doesn't have dry-run install). Replace first three vars with appropriate values
+```s
+OPERATOR_FILENAME=kudo-operator.yaml
+NAMESPACE=kudo
+OPERATOR_NAME=first-operator
+
+cd manifests
+k get operators.kudo.dev $OPERATOR_NAME -n $NAMESPACE --export -n $NAMESPACE -o yaml > $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+TMP_OPVERNAME=$(k get operatorversions.kudo.dev -n kudo -o jsonpath="{.items[?(@.spec.operator.name==\"${OPERATOR_NAME}\")].metadata.name}")
+k get operatorversions.kudo.dev ${TMP_OPVERNAME} --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+k get instances.kudo.dev ${OPERATOR_NAME}-instance --export -n $NAMESPACE -o yaml >> $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
+cd ..
+```
+3. Remove kudo and all yaml from the cluster
+```s
+kubectl kudo init --dry-run --output yaml | kubectl delete -f -
 ```
