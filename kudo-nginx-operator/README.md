@@ -1,5 +1,4 @@
 # https://kudo.dev/docs/developing-operators/getting-started.html#package-structure
-# Kotsadm: http://34.83.176.50:8800 / yqKI5ywYT
 
 # Prerequisites
 
