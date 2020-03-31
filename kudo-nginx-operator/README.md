@@ -18,7 +18,7 @@ kubectl krew install kudo
 2. Create an instance in GCE that uses the VPC. 
 3. Download airgap installer from vendor onto your desktop, and transfer the installer to the machine:
 ```s
-INSTANCE=austins-kotsapps-kudo
+INSTANCE=austins-kotsapps-kudo-3
 ZONE=us-west1-b
 PROJECT=smart-proxy-839
 
