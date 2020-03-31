@@ -8,6 +8,10 @@ The KUDO kubectl plugin.
 brew tap kudobuilder/tap
 brew install kudo-cli
 ```
+or 
+```s
+kubectl krew install kudo
+```
 
 
 # Setup
@@ -19,11 +23,11 @@ curl -sSL https://k8s.kurl.sh/kudo-nginx-operator-austin | sudo bash
 ```
 4. Verify you have kudo instances generated: 
 ```s
-kubectl kudo get instances -n kudo
+kubectl kudo get instances 
 ```
 5. Verfy you have two kudo pods: 
 ```s
-kubectl get pods -n kudo
+kubectl get pods 
 ```
 
 
