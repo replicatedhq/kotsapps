@@ -14,13 +14,27 @@ kubectl krew install kudo
 
 
 # Setup
-1. Create a VPC in GCE that is airgapped (or close enough, only allowing 22 and 8800 ingress)
+1. Create a VPC in GCE that is airgapped (or close enough, only allowing 22 and 8800 ingress/outbound. All other outbound denied)
 2. Create an instance in GCE that uses the VPC. 
-3. Install to the airgapped VM
+3. Download airgap installer from vendor onto your desktop, and transfer the installer to the machine:
 ```s
-curl -sSL https://k8s.kurl.sh/kudo-nginx-operator-austin | sudo bash
+INSTANCE=austins-kotsapps-kudo
+ZONE=us-west1-b
+PROJECT=smart-proxy-839
+
+curl -o replicated-installer.tar.gz https://kurl.sh/bundle/kudo-nginx-operator-austin
+gcloud compute scp replicated-installer.tar.gz ${INSTANCE}:replicated-installer.tar.gz --zone $ZONE
 ```
-4. Verify you have kudo instances generated: 
+4. Logon to the instance, extract the installer and begin installation: 
+```s
+gcloud beta compute ssh --zone $ZONE $INSTANCE --project $PROJECT
+mkdir replicated && mv replicated-installer.tar.gz replicated && cd replicated
+tar xvf replicated-installer.tar.gz
+cat ./install.sh | sudo bash -s airgap
+```
+5. Upload license and airgap bundle. 
+
+5. Verify you have kudo instances generated: 
 ```s
 kubectl kudo get instances 
 ```
