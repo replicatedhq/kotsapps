@@ -65,6 +65,8 @@ spec:
                 image: 'repl{{ LocalImageName "nginx:1.7.9" }}'
                 ports:
                   - containerPort: 80
+            imagePullSecrets:
+              - name: kotsadm-relicated-registry
   version: 0.1.0
 status: {}
 ---
