@@ -1,0 +1,87 @@
+apiVersion: kudo.dev/v1beta1
+kind: Operator
+metadata:
+  generation: 1
+  name: first-operator
+  selfLink: /apis/kudo.dev/v1beta1/namespaces/kudo/operators/first-operator
+spec:
+  kubernetesVersion: 1.13.0
+  maintainers:
+  - email: austinc@replicated.com
+    name: Austin Chambers
+  url: https://kudo.dev
+status: {}
+---
+apiVersion: kudo.dev/v1beta1
+kind: OperatorVersion
+metadata:
+  generation: 1
+  name: first-operator-0.1.0
+  selfLink: /apis/kudo.dev/v1beta1/namespaces/kudo/operatorversions/first-operator-0.1.0
+spec:
+  appVersion: 1.7.9
+  operator:
+    kind: Operator
+    name: first-operator
+  parameters:
+  - default: "2"
+    description: Number of replicas that should be run as part of the deployment
+    name: replicas
+    required: true
+  plans:
+    deploy:
+      phases:
+      - name: main
+        steps:
+        - name: everything
+          tasks:
+          - app
+        strategy: parallel
+      strategy: serial
+  tasks:
+  - kind: Apply
+    name: app
+    spec:
+      resources:
+      - deployment.yaml
+  templates:
+    deployment.yaml: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: nginx-deployment
+      spec:
+        selector:
+          matchLabels:
+            app: nginx
+        replicas: {{ .Params.replicas }} # tells deployment to run 2 pods matching the template
+        template:
+          metadata:
+            labels:
+              app: nginx
+          spec:
+            containers:
+              - name: nginx
+                image: 'repl{{ LocalImageName "nginx:1.7.9" }}'
+                ports:
+                  - containerPort: 80
+            imagePullSecrets:
+              - name: kotsadm-replicated-registry
+  version: 0.1.0
+status: {}
+---
+apiVersion: kudo.dev/v1beta1
+kind: Instance
+metadata:
+  annotations:
+    kudo.dev/last-applied-instance-state: '{"operatorVersion":{"name":"first-operator-0.1.0"},"planExecution":{}}'
+  generation: 1
+  labels:
+    kudo.dev/operator: first-operator
+  name: first-operator-instance
+  selfLink: /apis/kudo.dev/v1beta1/namespaces/kudo/instances/first-operator-instance
+spec:
+  operatorVersion:
+    name: first-operator-0.1.0
+  planExecution: {}
+---
