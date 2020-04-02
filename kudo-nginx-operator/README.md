@@ -55,6 +55,7 @@ OPERATOR_FILENAME=kudo-operator.yaml
 NAMESPACE=kudo
 OPERATOR_NAME=first-operator
 
+kudo install ./kudo-operator
 cd manifests
 kubectl get operators.kudo.dev $OPERATOR_NAME -n $NAMESPACE --export -n $NAMESPACE -o yaml > $OPERATOR_FILENAME && echo --- >> $OPERATOR_FILENAME
 TMP_OPVERNAME=$(kubectl get operatorversions.kudo.dev -n kudo -o jsonpath="{.items[?(@.spec.operator.name==\"${OPERATOR_NAME}\")].metadata.name}")
