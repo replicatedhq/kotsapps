@@ -4,7 +4,7 @@ metadata:
   name: backup
 spec:
   includedNamespaces:
-  - default
+  - '{{repl Namespace}}'
   hooks:
     resources:
     - name: echo-hook
