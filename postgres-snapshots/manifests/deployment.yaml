@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-nginx
+  name: postgres-snapshots
   labels:
-    app: example
+    app: postgres
     component: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: example
+      app: postgres
       component: nginx
   template:
     metadata:
       labels:
-        app: example
+        app: postgres
         component: nginx
     spec:
       containers:
