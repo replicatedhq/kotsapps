@@ -17,6 +17,9 @@ spec:
         app: postgres
         component: nginx
     spec:
+      volumes:
+      - name: scratch
+        emptyDir: {}
       containers:
         - name: nginx
           image: nginx
@@ -25,3 +28,6 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
+          volumeMounts:
+          - name: scratch
+            mountPath: /scratch
