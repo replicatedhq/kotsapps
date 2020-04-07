@@ -11,11 +11,9 @@ spec:
   # values are used in the customer environment, as a pre-render step
   # these values will be supplied to helm template
   values: 
-  {
-    postgresqlDatabase: my-database,
+    postgresqlDatabase: my-database
     postgresqlPassword: secretpassword
-  }
-
+  
   # builder values provide a way to render the chart with all images
   # and manifests. this is used in replicated to create airgap packages
   builder: {}
