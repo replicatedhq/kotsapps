@@ -1,0 +1,43 @@
+name: postgres-snapshots CI
+
+on:
+  push:
+    paths:
+    - 'postgres-snapshots/**'
+    - '.github/workflows/postgres-snapshots.yml'
+    - 'common/Makefile.default'
+    - '!**.md'
+    branches:
+    - "**"
+    - "!**-norelease"
+    tags:
+    - 'v[0-9]+.[0-9]+.[0-9]+*'
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    env: 
+      working-directory: ./postgres-snapshots
+    steps:
+    - uses: actions/checkout@v1
+      with: 
+        fetch-depth: 0
+    - name: Get tag name, if specified
+      shell: bash
+      run: if grep -q "/tags/" <<< "${GITHUB_REF}"; then echo ::set-output name=tag::${GITHUB_REF:10}; fi
+      id: get_tag
+    - name: Get branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: get_branch
+    - name: Create a release on Channel associated with the branch
+      run: cp ../common/Makefile.default ./Makefile; make release
+      shell: bash
+      working-directory: ${{env.working-directory}}
+      env:
+        REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
+        REPLICATED_APP: postgres-snapshots
+        GITHUB_BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
+        GITHUB_TAG_NAME: ${{ steps.get_tag.outputs.tag }}
+
+
+
