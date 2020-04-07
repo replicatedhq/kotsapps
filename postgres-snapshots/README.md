@@ -1,3 +1,10 @@
+# Helm Chart Manifest Download Step 
+
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+helm search bitnami
+helm fetch bitnami/postgresql
+
 # Prerequisites (Existing Clusters)
 
 1. The velero CLI needs to be installed: 
@@ -43,4 +50,3 @@ Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:
 10. Enter a desired path (/ is fine)
 11. Click "Update Settings"
 12. Go to the "Snapshots" tab and click "Start a snapshot" 
-
