@@ -3,13 +3,9 @@ kind: Backup
 metadata:
   name: backup
 spec:
-  includedNamespaces:
-  - '{{repl Namespace}}'
   hooks:
     resources:
     - name: echo-hook
-      includedNamespaces:
-      - '*'
       includedResources:
       - 'pods'
       labelSelector:
@@ -18,16 +14,12 @@ spec:
           component: nginx
       pre:
       - exec:
-          command: ["/bin/bash", "-c", "echo hello"]
-      - exec:
           command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
       - exec:
           command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
           timeout: 3m
           onError: Continue
     - name: postgres-hook
-      includedNamespaces:
-      - '*'
       includedResources:
       - 'pods'
       labelSelector:
@@ -36,10 +28,8 @@ spec:
           statefulset.kubernetes.io/pod-name: postgresql-postgresql-0
       pre:
       - exec:
-          command: ["/bin/bash", "-c", "echo hello"]
-      - exec:
           command: ["/bin/bash", "-c", "echo $(date) > /tmp/timestamp"]
       - exec:
-          command: ["/bin/bash", "-c", "export PGPASSWORD=secretpassword && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql"]
+          command: ["/bin/bash", "-c", "export PGPASSWORD={{repl ConfigOption postgresql_password}} && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql"]
           timeout: 3m
           onError: Continue
