@@ -13,6 +13,8 @@ spec:
       component: nginx
   template:
     metadata:
+      annotations:
+        backup.velero.io/backup-volumes: scratch
       labels:
         app: postgres
         component: nginx

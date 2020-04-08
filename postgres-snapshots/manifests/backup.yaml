@@ -38,8 +38,8 @@ spec:
       - exec:
           command: ["/bin/bash", "-c", "echo hello"]
       - exec:
-          command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
+          command: ["/bin/bash", "-c", "echo $(date) > /tmp/timestamp"]
       - exec:
-          command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
+          command: ["/bin/bash", "-c", "export PGPASSWORD=secretpassword && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql"]
           timeout: 3m
           onError: Continue
