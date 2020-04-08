@@ -25,3 +25,21 @@ spec:
           command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
           timeout: 3m
           onError: Continue
+    - name: postgres-hook
+      includedNamespaces:
+      - '*'
+      includedResources:
+      - 'pods'
+      labelSelector:
+        matchLabels:
+          app: postgresql
+          statefulset.kubernetes.io/pod-name: postgresql-postgresql-0
+      pre:
+      - exec:
+          command: ["/bin/bash", "-c", "echo hello"]
+      - exec:
+          command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
+      - exec:
+          command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
+          timeout: 3m
+          onError: Continue
