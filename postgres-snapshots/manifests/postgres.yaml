@@ -12,7 +12,7 @@ spec:
   # these values will be supplied to helm template
   values: 
     postgresqlDatabase: my-database
-    postgresqlPassword: '{{repl ConfigOption postgres_password}}'
+    postgresqlPassword: '{{repl ConfigOption "postgres_password"}}'
   
   # builder values provide a way to render the chart with all images
   # and manifests. this is used in replicated to create airgap packages

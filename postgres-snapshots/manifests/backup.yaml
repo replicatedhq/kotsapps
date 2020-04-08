@@ -30,6 +30,6 @@ spec:
       - exec:
           command: ["/bin/bash", "-c", "echo $(date) > /tmp/timestamp"]
       - exec:
-          command: ["/bin/bash", "-c", "export PGPASSWORD={{repl ConfigOption postgresql_password}} && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql"]
+          command: ["/bin/bash", "-c", 'export PGPASSWORD={{repl ConfigOption "postgresql_password"}} && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql']
           timeout: 3m
           onError: Continue
