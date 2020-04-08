@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-snapshots
+  labels:
+    app: postgres
+    component: nginx
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: postgres
+    component: nginx

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-nginx
+  labels:
+    app: postgres
+    component: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+      component: nginx
+  template:
+    metadata:
+      annotations:
+        backup.velero.io/backup-volumes: scratch
+      labels:
+        app: postgres
+        component: nginx
+    spec:
+      volumes:
+      - name: scratch
+        emptyDir: {}
+      containers:
+        - name: nginx
+          image: nginx
+          envFrom:
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          volumeMounts:
+          - name: scratch
+            mountPath: /scratch

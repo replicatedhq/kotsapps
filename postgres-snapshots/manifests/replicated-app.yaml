@@ -1,0 +1,14 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: postgres-snapshots
+spec:
+  title: Postgres Snapshots
+  icon: https://github.com/cncf/artwork/blob/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
+  statusInformers:
+    - deployment/postgres-snapshots
+  ports:
+    - serviceName: "postgres-snapshots"
+      servicePort: 80
+      localPort: 8888
+      applicationUrl: "http://postgres-snapshots"

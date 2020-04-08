@@ -1,0 +1,35 @@
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: backup
+spec:
+  hooks:
+    resources:
+    - name: echo-hook
+      includedResources:
+      - 'pods'
+      labelSelector:
+        matchLabels:
+          app: postgres
+          component: nginx
+      pre:
+      - exec:
+          command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
+      - exec:
+          command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
+          timeout: 3m
+          onError: Continue
+    - name: postgres-hook
+      includedResources:
+      - 'pods'
+      labelSelector:
+        matchLabels:
+          app: postgresql
+          statefulset.kubernetes.io/pod-name: postgresql-postgresql-0
+      pre:
+      - exec:
+          command: ["/bin/bash", "-c", "echo $(date) > /tmp/timestamp"]
+      - exec:
+          command: ["/bin/bash", "-c", 'export PGPASSWORD={{repl ConfigOption "postgres_password"}} && pg_dump -U postgres -d my-database -h 127.0.0.1 > /tmp/backup.sql']
+          timeout: 3m
+          onError: Continue
