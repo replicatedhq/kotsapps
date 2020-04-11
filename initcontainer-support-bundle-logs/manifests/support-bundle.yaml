@@ -1,0 +1,16 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - logs:
+        name: app-logs
+        selector:
+          - app=many-init-containers
+        namespace: default
+        containerNames:
+          - first
+          - second
+          - third
+          - fourth
