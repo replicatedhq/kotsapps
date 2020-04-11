@@ -22,10 +22,12 @@ kubectl support-bundle support-bundle.yaml
 Untar the bundle
 
 ```
-tar xvf support-bundle.tar.gz app-logs
+tar xvf support-bundle.tar.gz app-logs failing-app-logs
 ```
 
-Review the logs
+
+
+Review the healthy deployment logs
 
 ```
 tail app-logs/**/*
@@ -52,4 +54,32 @@ Sat Apr 11 18:17:12 UTC 2020 third container waiting
 Sat Apr 11 18:17:22 UTC 2020 third container waiting
 Sat Apr 11 18:17:32 UTC 2020 third container waiting
 Sat Apr 11 18:17:42 UTC 2020 third container waiting
+```
+
+Review the unhealthy deployment logs
+
+
+```
+tail failing-app-logs/**/*
+```
+
+You should see something like
+
+```
+==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/first.log <==
+Sat Apr 11 18:27:34 UTC 2020 I'm First...
+first done
+
+==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/second-previous.log <==
+Sat Apr 11 18:27:56 UTC 2020 I'm Second
+whoops, something broke!
+
+==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/second.log <==
+Sat Apr 11 18:28:22 UTC 2020 I'm Second
+
+
+==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/third-errors.json <==
+[
+  "failed to get log stream: container \"third\" in pod \"failing-init-container-567c7d6db8-9wftq\" is waiting to start: PodInitializing"
+]
 ```
