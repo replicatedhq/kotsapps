@@ -1,5 +1,6 @@
-deps/LICENSE
-deps/README.md
-deps/replicated
+**/deps/LICENSE
+**/deps/README.md
+**/deps/replicated
 .DS_Store
 Makefile
+
