@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-consumer
+spec:
+  selector:
+    matchLabels:
+      app: pg-consumer
+  template:
+    metadata:
+      labels:
+        app: pg-consumer
+    spec:
+      containers:
+        - name: pg-consumer
+          image: postgres:10
+          command:
+            - /bin/sh
+            - -c
+            - while :; do psql --host ${DB_HOST} --port ${DB_PORT} --user ${DB_USER} --password ${DB_PASSWORD} --dbname ${DB_NAME} --command 'SELECT NOW()'; sleep 10; done
+          env:
+            - name: DB_HOST
+              value: postgres
+            - name: DB_PORT
+              value: 5432
+            - name: DB_USER
+              value: postgres
+            - name: DB_PASSWORD
+              value: postgres
+            - name: DB_NAME
+              value: postgres
