@@ -17,13 +17,13 @@ spec:
           # connect to the database every 10 seconds
           command:
             - /bin/sh
-            - -c
+            - -ec
             - |
               while :; do
+                 PGPASSWORD=${DB_PASSWORD} \
                  psql --host ${DB_HOST} \
                       --port ${DB_PORT} \
                       --user ${DB_USER} \
-                      --password ${DB_PASSWORD} \
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
                  sleep 10

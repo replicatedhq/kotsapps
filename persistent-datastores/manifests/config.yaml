@@ -15,10 +15,35 @@ spec:
           items:
             - name: embedded_postgres
               title: Embedded Postgres
-            - name: external_postgres_inline
+            - name: external_postgres
               title: External Postgres
         - name: embedded_postgres_password
           hidden: true
           type: password
           value: "{{repl RandomString 32}}"
+        - name: external_postgres_host
+          title: Postgres Host
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          default: postgres
+        - name: external_postgres_port
+          title: Postgres Port
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          default: "5432"
+        - name: external_postgres_user
+          title: Postgres Username
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          required: true
+        - name: external_postgres_password
+          title: Postgres Password
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: password
+          required: true
+        - name: external_postgres_db
+          title: Postgres Database
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          default: postgres
 
