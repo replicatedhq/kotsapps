@@ -20,27 +20,38 @@ spec:
             - -ec
             - |
               while :; do
+                 sleep 10
                  PGPASSWORD=${DB_PASSWORD} \
                  psql --host ${DB_HOST} \
                       --port ${DB_PORT} \
                       --user ${DB_USER} \
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
-                 sleep 10
               done
-          # hard coded for now, we'll wire these up later
           env:
             - name: DB_HOST
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: DB_HOST
             - name: DB_PORT
-              value: "5432"
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: DB_PORT
             - name: DB_USER
-              value: postgres
-            - name: DB_NAME
-              value: postgres
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: DB_USER
             - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: DB_NAME
 
