@@ -32,12 +32,12 @@ spec:
           # hard coded for now, we'll wire these up later
           env:
             - name: DB_HOST
-              value: postgres
+              value: 'postgres'
             - name: DB_PORT
               value: '5432'
             - name: DB_USER
-              value: postgres
+              value: 'postgres'
             - name: DB_PASSWORD
-              value: postgres
+              value: 'postgres'
             - name: DB_NAME
-              value: postgres
+              value: 'postgres'
