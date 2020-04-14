@@ -10,17 +10,19 @@ spec:
     metadata:
       labels:
         app: pg-consumer
+      annotations:
+        kots.io/config-hash: '{{repl ConfigOption "external_postgres_confighash"}}'
     spec:
       containers:
         - name: pg-consumer
           image: 'postgres:10'
-          # connect to the database every 10 seconds
+          # connect to the database every 20 seconds
           command:
             - /bin/sh
             - -ec
             - |
               while :; do
-                 sleep 10
+                 sleep 20
                  PGPASSWORD=${DB_PASSWORD} \
                  psql --host ${DB_HOST} \
                       --port ${DB_PORT} \
@@ -28,30 +30,7 @@ spec:
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
               done
-          env:
-            - name: DB_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: DB_HOST
-            - name: DB_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: DB_PORT
-            - name: DB_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: DB_USER
-            - name: DB_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: DB_PASSWORD
-            - name: DB_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: postgres
-                  key: DB_NAME
+          envFrom:
+            - secretRef:
+                name: postgres
 

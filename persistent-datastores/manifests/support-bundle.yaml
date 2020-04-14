@@ -9,4 +9,4 @@ spec:
     - logs:
         selector:
           - app=pg-consumer
-        namespace: repl{{ Namespace }}
+        namespace: '{{repl Namespace }}'
