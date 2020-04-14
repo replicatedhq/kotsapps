@@ -2,7 +2,7 @@ Troubleshoting example: Multi-container Deployments
 ========================
 
 
-This repo containers an example deployment and [troubleshot.sh](https://troubleshoot.sh) Collector. It demonstrates collecting logs from a multi-container deployment with two `initContainer` entries and two `container` entries.
+This repo contains an example deployment and [troubleshoot.sh](https://troubleshoot.sh) Collector. It demonstrates collecting logs from a multi-container deployment with two `initContainer` entries and two `container` entries.
 
 
 ### Testing
