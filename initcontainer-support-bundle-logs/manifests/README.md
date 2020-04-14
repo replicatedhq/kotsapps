@@ -1,4 +1,4 @@
-Troubleshoting example: Multi-container Deployments
+Troubleshooting example: Multi-container Deployments
 ========================
 
 
