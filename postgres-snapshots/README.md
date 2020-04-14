@@ -52,10 +52,3 @@ Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:
 10. Enter a desired path (/ is fine)
 11. Click "Update Settings"
 12. Go to the "Snapshots" tab and click "Start a snapshot" 
-
-
-pg_dump -h postgresql -U postgres my-database > /tmp/backup.sql
-
-k delete statefulset postgresql-postgresql
-k delete pvc data-postgresql-postgresql-0 
-kubectl -n velero get backup manual-1586383117358 -o yaml
