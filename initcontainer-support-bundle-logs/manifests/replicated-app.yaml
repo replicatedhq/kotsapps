@@ -1,0 +1,6 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: initcontainer-logs
+spec:
+  title: InitContainer Logs Example
