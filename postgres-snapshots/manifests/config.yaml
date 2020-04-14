@@ -4,14 +4,20 @@ metadata:
   name: config-postgres
 spec:
   groups:
-    - name: postgres_settings
-      description: Configuration to serve as an example for creating your own. See [https://kots.io/reference/v1beta1/config/](https://kots.io/reference/v1beta1/config/) for configuration docs. In this case, we provide example fields for configuring an Ingress object.
+    - name: database
+      title: Database
       items:
-        - name: postgres_password
-          title: Postgres Password
-          type: text
-          default: "secretpassword"
-        - name: application_namespace
-          title: Application Namespace
-          type: text
-          default: "kotsapp"
+        - name: postgres_type
+          help_text: Would you like to use an embedded postgres instance, or connect to an external instance that you manage?
+          type: select_one
+          title: Postgres
+          default: embedded_postgres
+          items:
+            - name: embedded_postgres
+              title: Embedded Postgres
+            - name: external_postgres
+              title: External Postgres
+        - name: embedded_postgres_password
+          hidden: true
+          type: password
+          value: "{{repl RandomString 32}}"  
