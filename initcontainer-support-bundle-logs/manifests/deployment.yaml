@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: many-init-containers
+spec:
+  selector:
+    matchLabels:
+      app: many-init-containers
+  template:
+    metadata:
+      labels:
+        app: many-init-containers
+    spec:
+      initContainers:
+        - name: first
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - echo "$(date) I'm First..."; sleep 10; echo "first done"
+        - name: second
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - echo "$(date) I'm Second"; sleep 10; echo "second done"
+      containers:
+        - name: third
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - while :; do echo "$(date) third container waiting"; sleep 10; done
+
+        - name: fourth
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - while :; do echo "$(date) fourth container waiting"; sleep 10; done
+

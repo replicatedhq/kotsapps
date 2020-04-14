@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: failing-init-container
+spec:
+  selector:
+    matchLabels:
+      app: failing-init-container
+  template:
+    metadata:
+      labels:
+        app: failing-init-container
+    spec:
+      initContainers:
+        - name: first
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - echo "$(date) I'm First..."; sleep 10; echo "first done"
+        - name: second
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - echo "$(date) I'm Second"; sleep 10; echo "whoops, something broke!"; exit 1;
+      containers:
+        - name: third
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - while :; do echo "$(date) third container waiting"; sleep 10; done

@@ -36,6 +36,8 @@ AWS:   `velero install --use-restic --plugins velero/plugin-for-aws:v1.0.0 --no-
 GCP:   `velero install --use-restic --plugins velero/plugin-for-gcp:v1.0.0 --no-default-backup-location --no-secret`
 Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:v1.0.0 --no-default-backup-location --no-secret`
 
+
+
 # Example installation how-to
 1. Ensure velero is installed for existing cluster installs (see above). It is automatically included in embedded installs. 
 2. Install the kots application: 

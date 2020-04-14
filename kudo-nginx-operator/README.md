@@ -1,6 +1,46 @@
 # https://kudo.dev/docs/developing-operators/getting-started.html#package-structure
 
-# Prerequisites
+# Existing Cluster Install Steps
+1. Run: 
+```s
+curl https://kots.io/install | bash kubectl kots install kudo-nginx-operator
+```
+2. Follow steps on command line, and upload license file (License-Stable.yaml) to admin console
+
+# New VM Install Steps (Embed the k8s cluster along with the application):
+1. Run: 
+```s
+curl -sSL https://k8s.kurl.sh/kudo-nginx-operator | sudo bash
+```
+2. Follow steps on command line, and upload license file (License-Stable.yaml) to admin console
+
+# Airgapped Install Steps onto a new machine
+1. Create an airgapped network, or one that is close enough to verify all outbound is denied with minimal ingress (e.g., only allow 8800/22 ingress). 
+2. Create an instance within the network. 
+3. Download airgap installer from vendor onto your desktop, and transfer the installer to the machine:
+```s
+curl -o replicated-installer.tar.gz https://kurl.sh/bundle/kudo-nginx-operator-austin
+gcloud compute scp replicated-installer.tar.gz ${INSTANCE}:replicated-installer.tar.gz --zone $ZONE
+```
+4. Logon to the instance, extract the installer and begin installation: 
+```s
+mkdir replicated && mv replicated-installer.tar.gz replicated && cd replicated
+tar xvf replicated-installer.tar.gz
+cat ./install.sh | sudo bash -s airgap
+```
+5. Follow steps on command line, and upload license file (License-Stable.yaml) and airgap bundle to admin console
+6. Verify you have kudo instances generated: 
+```s
+kubectl kudo get instances 
+```
+7. Verfy you have two kudo pods: 
+```s
+kubectl get pods 
+```
+
+# How I generated the Operator YAML using KUDO
+
+## Prerequisites
 
 The KUDO kubectl plugin. 
 ```s
@@ -12,39 +52,7 @@ or
 kubectl krew install kudo
 ```
 
-
-# Setup
-1. Create a VPC in GCE that is airgapped (or close enough, only allowing 22 and 8800 ingress/outbound. All other outbound denied)
-2. Create an instance in GCE that uses the VPC. 
-3. Download airgap installer from vendor onto your desktop, and transfer the installer to the machine:
-```s
-INSTANCE=austins-kotsapps-kudo-3
-ZONE=us-west1-b
-PROJECT=smart-proxy-839
-
-curl -o replicated-installer.tar.gz https://kurl.sh/bundle/kudo-nginx-operator-austin
-gcloud compute scp replicated-installer.tar.gz ${INSTANCE}:replicated-installer.tar.gz --zone $ZONE
-```
-4. Logon to the instance, extract the installer and begin installation: 
-```s
-gcloud beta compute ssh --zone $ZONE $INSTANCE --project $PROJECT
-mkdir replicated && mv replicated-installer.tar.gz replicated && cd replicated
-tar xvf replicated-installer.tar.gz
-cat ./install.sh | sudo bash -s airgap
-```
-5. Upload license and airgap bundle. 
-
-5. Verify you have kudo instances generated: 
-```s
-kubectl kudo get instances 
-```
-5. Verfy you have two kudo pods: 
-```s
-kubectl get pods 
-```
-
-
-# How I generated the Operator YAML using KUDO
+## Steps: 
 1. Initialize KUDO and create Kudo manifest (including CRDs). Or use what is in repo 
 ```s
 kubectl kudo init --dry-run --output yaml > ./manifests/kudo.yaml
