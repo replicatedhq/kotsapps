@@ -12,3 +12,5 @@ spec:
       servicePort: 80
       localPort: 8888
       applicationUrl: "http://postgres-snapshots"
+  additionalImages:
+    - bitnami/postgresql:latest
