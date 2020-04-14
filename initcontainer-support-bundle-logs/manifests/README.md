@@ -22,7 +22,7 @@ kubectl support-bundle support-bundle.yaml
 Untar the bundle
 
 ```
-tar xvf support-bundle.tar.gz app-logs failing-app-logs
+tar xzvf support-bundle.tar.gz app-logs failing-app-logs
 ```
 
 
