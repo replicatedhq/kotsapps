@@ -22,6 +22,20 @@ spec:
       volumes:
       - name: scratch
         emptyDir: {}
+      initContainers:
+        - name: postgresql-init
+          image: bitnami/postgresql:11.7.0-debian-10-r63
+          envFrom:
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+          - name: scratch
+            mountPath: /scratch
+          command: ["/bin/sh", "-c", 'chmod a+w /scratch && ([ -e /scratch/backup.sql ] && export PGPASSWORD={{repl ConfigOption "postgres_password"}} && pg_restore -U postgres -d my-database -h postgresql --create /scratch/backup.sql && rm /scratch/backup.sql) || true']      
       containers:
         - name: nginx
           image: nginx
@@ -33,3 +47,16 @@ spec:
           volumeMounts:
           - name: scratch
             mountPath: /scratch
+        - name: postgresql
+          image: bitnami/postgresql:11.7.0-debian-10-r63
+          envFrom:
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+          - name: scratch
+            mountPath: /scratch
+          command: ["/bin/sh", "-c", "sleep infinity"]
