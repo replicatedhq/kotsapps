@@ -36,6 +36,8 @@ AWS:   `velero install --use-restic --plugins velero/plugin-for-aws:v1.0.0 --no-
 GCP:   `velero install --use-restic --plugins velero/plugin-for-gcp:v1.0.0 --no-default-backup-location --no-secret`
 Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:v1.0.0 --no-default-backup-location --no-secret`
 
+
+
 # Example installation how-to
 1. Ensure velero is installed for existing cluster installs (see above). It is automatically included in embedded installs. 
 2. Install the kots application: 
@@ -50,3 +52,10 @@ Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:
 10. Enter a desired path (/ is fine)
 11. Click "Update Settings"
 12. Go to the "Snapshots" tab and click "Start a snapshot" 
+
+
+pg_dump -h postgresql -U postgres my-database > /tmp/backup.sql
+
+k delete statefulset postgresql-postgresql
+k delete pvc data-postgresql-postgresql-0 
+kubectl -n velero get backup manual-1586383117358 -o yaml
