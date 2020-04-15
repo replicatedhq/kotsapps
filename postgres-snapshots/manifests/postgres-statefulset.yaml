@@ -5,6 +5,7 @@ metadata:
   labels:
     app: pg-provider
   annotations:
+    kots.io/config-hash: '{{repl ConfigOption "external_postgres_confighash"}}'
     kots.io/when: '{{repl ConfigOptionEquals "postgres_type" "embedded_postgres" }}'
 spec:
   replicas: 1

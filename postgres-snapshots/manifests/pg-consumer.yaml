@@ -24,7 +24,7 @@ spec:
             - |
               while :; do 
                  sleep 20
-                 PGPASSWORD=${DB_PASSWORD} \
+                 export PGPASSWORD=${DB_PASSWORD} \
                  psql --host ${DB_HOST} \
                       --port ${DB_PORT} \ 
                       --user ${DB_USER} \
@@ -57,3 +57,11 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: DB_NAME
+        - name: pg-consumer-keepalive
+          image: postgres:10
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          securityContext:
+            runAsUser: 0
+          command: ["/bin/sh", "-c", "sleep infinity"]
