@@ -11,6 +11,8 @@ spec:
     metadata:
       labels: 
         app: pg-consumer
+      annotations:
+        kots.io/config-hash: '{{repl ConfigOption "external_postgres_confighash"}}'
     spec:
       containers:
         - name: pg-consumer
