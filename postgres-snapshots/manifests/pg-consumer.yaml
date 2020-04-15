@@ -31,6 +31,13 @@ spec:
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
               done
+          envFrom:
+            - secretRef:
+                name: postgres-secret
+          securityContext:
+            runAsUser: 0
+        - name: pg-consumer-keepalive
+          image: postgres:10
           env:
             - name: DB_HOST
               valueFrom:
@@ -57,11 +64,6 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: DB_NAME
-        - name: pg-consumer-keepalive
-          image: postgres:10
-          envFrom:
-            - secretRef:
-                name: postgres-secret
           securityContext:
             runAsUser: 0
           command: ["/bin/sh", "-c", "sleep infinity"]
