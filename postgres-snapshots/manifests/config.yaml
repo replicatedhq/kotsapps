@@ -4,14 +4,51 @@ metadata:
   name: config-postgres
 spec:
   groups:
-    - name: postgres_settings
-      description: Configuration to serve as an example for creating your own. See [https://kots.io/reference/v1beta1/config/](https://kots.io/reference/v1beta1/config/) for configuration docs. In this case, we provide example fields for configuring an Ingress object.
+    - name: database
+      title: Database
       items:
-        - name: postgres_password
+        - name: postgres_type
+          help_text: Would you like to use an embedded postgres instance, or connect to an external instance that you manage?
+          type: select_one
+          title: Postgres
+          default: embedded_postgres
+          items:
+            - name: embedded_postgres
+              title: Embedded Postgres
+            - name: external_postgres
+              title: External Postgres
+        - name: embedded_postgres_password
+          hidden: true
+          type: password
+          value: "{{repl RandomString 32}}"
+        - name: external_postgres_host
+          title: Postgres Host
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          default: postgres
+        - name: external_postgres_port
+          title: Postgres Port
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          default: "5432"
+        - name: external_postgres_user
+          title: Postgres Username
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: text
+          required: true
+          default: "postgres"
+        - name: external_postgres_password
           title: Postgres Password
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
+          type: password
+          required: true
+        - name: external_postgres_db
+          title: Postgres Database
+          when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
-          default: "secretpassword"
-        - name: application_namespace
-          title: Application Namespace
+          default: postgres
+        - name: external_postgres_confighash
+          hidden: true
+          readonly: true
           type: text
-          default: "kotsapp"
+          value: '{{repl (sha256sum (print (ConfigOption "external_postgres_host") (ConfigOption "external_postgres_port") (ConfigOption "external_postgres_user") (ConfigOption "external_postgres_password") (ConfigOption "external_postgres_db") ))}}'

@@ -6,11 +6,6 @@ spec:
   title: Postgres Snapshots
   icon: https://github.com/cncf/artwork/blob/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
   statusInformers:
-    - deployment/postgres-snapshots
-  ports:
-    - serviceName: "postgres-snapshots"
-      servicePort: 80
-      localPort: 8888
-      applicationUrl: "http://postgres-snapshots"
-  additionalImages:
-    - bitnami/postgresql:latest
+    - deployment/pg-consumer
+    - deployment/pg-snapshot
+

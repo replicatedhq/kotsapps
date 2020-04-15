@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  labels:
+    app: pg-provider
+  annotations:
+    kots.io/config-hash: '{{repl ConfigOption "external_postgres_confighash"}}'
+    kots.io/when: '{{repl ConfigOptionEquals "postgres_type" "embedded_postgres" }}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pg-provider
+  serviceName: postgres
+  template:
+    metadata:
+      labels:
+        app: pg-provider
+    spec:
+      containers:
+      - env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+        # create a db called "postgres"
+        - name: POSTGRES_DB
+          value: postgres
+        # create admin user with name "postgres"
+        - name: POSTGRES_USER
+          value: postgres
+        # use admin password from secret
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DB_PASSWORD
+              name: postgres-secret
+        image: postgres:10
+        name: postgres
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgdata
+      volumes:
+      - name: pgdata
+        persistentVolumeClaim:
+          claimName: pgdata
+  volumeClaimTemplates:
+  - metadata:
+      name: pgdata
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi

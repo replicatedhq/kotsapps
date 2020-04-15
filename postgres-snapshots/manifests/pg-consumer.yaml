@@ -1,0 +1,59 @@
+# pg-consumer.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pg-consumer 
+spec:
+  selector:
+    matchLabels:
+      app: pg-consumer
+  template:
+    metadata:
+      labels: 
+        app: pg-consumer
+      annotations:
+        kots.io/config-hash: '{{repl ConfigOption "external_postgres_confighash"}}'
+    spec:
+      containers:
+        - name: pg-consumer
+          image: postgres:10
+          # connect to the database every 20 seconds
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              while :; do 
+                 sleep 20
+                 PGPASSWORD=${DB_PASSWORD} \
+                 psql --host ${DB_HOST} \
+                      --port ${DB_PORT} \
+                      --user ${DB_USER} \
+                      --dbname ${DB_NAME} \
+                      --command 'SELECT NOW()'
+              done
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_NAME
