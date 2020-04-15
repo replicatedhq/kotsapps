@@ -33,7 +33,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: DB_PASSWORD
-              name: postgres-secret
+              name: postgres
         image: postgres:10
         name: postgres
         volumeMounts:

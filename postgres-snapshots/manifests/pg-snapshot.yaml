@@ -8,7 +8,7 @@ spec:
       app: pg-snapshot
   template:
     metadata:
-      labels: 
+      labels:
         app: pg-snapshot
       annotations:
         # Snapshot capabilities only enabled for embedded databases
@@ -24,20 +24,20 @@ spec:
           image: postgres:10
           envFrom:
             - secretRef:
-                name: postgres-secret
+                name: postgres
           securityContext:
             runAsUser: 0
           volumeMounts:
           - name: scratch
             mountPath: /scratch
-          # Trigger restore on pod init if dump file is located in scratch directory. After restore, delete the file. 
-          command: ["/bin/sh", "-c", 'chmod a+w /scratch && ([ -e /scratch/backup.sql ] && export PGPASSWORD=$DB_PASSWORD && pg_restore -U $DB_USER -d $DB_NAME -h $DB_HOST --create /scratch/backup.sql && rm /scratch/backup.sql) || true']      
+          # Trigger restore on pod init if dump file is located in scratch directory. After restore, delete the file.
+          command: ["/bin/sh", "-c", 'chmod a+w /scratch && ([ -e /scratch/backup.sql ] && export PGPASSWORD=$DB_PASSWORD && pg_restore -U $DB_USER -d $DB_NAME -h $DB_HOST --create /scratch/backup.sql && rm /scratch/backup.sql) || true']
       containers:
         - name: pg-snapshot-keepalive
           image: postgres:10
           envFrom:
             - secretRef:
-                name: postgres-secret
+                name: postgres
           securityContext:
             runAsUser: 0
           volumeMounts:
