@@ -36,6 +36,7 @@ spec:
           when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'
           type: text
           required: true
+          default: "postgres"
         - name: external_postgres_password
           title: Postgres Password
           when: '{{repl ConfigOptionEquals "postgres_type" "external_postgres"}}'

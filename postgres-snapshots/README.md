@@ -32,9 +32,9 @@ BUCKET_NAME=$(cat gcp-setup.log | grep "BUCKET_NAME" | awk '{print $2}')
 ```
 4. Add the velero plugin, along with the secret created in step 3. This plugin is included automatically for embedded cluster installs. Change the provider to GCP, AWS, or AZURE
 
-AWS:   `velero install --use-restic --plugins velero/plugin-for-aws:v1.0.0 --no-default-backup-location --no-secret`
-GCP:   `velero install --use-restic --plugins velero/plugin-for-gcp:v1.0.0 --no-default-backup-location --no-secret`
-Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:v1.0.0 --no-default-backup-location --no-secret`
+AWS:   `velero install --use-restic --plugins velero/plugin-for-aws:v1.0.0 --no-default-backup-location --no-secret --provider aws`
+GCP:   `velero install --use-restic --plugins velero/plugin-for-gcp:v1.0.0 --no-default-backup-location --no-secret --provider gcp`
+Azure: `velero install --use-restic --plugins velero/plugin-for-microsoft-azure:v1.0.0 --no-default-backup-location --no-secret --provider azure`
 
 
 
