@@ -24,20 +24,13 @@ spec:
             - |
               while :; do 
                  sleep 20
-                 export PGPASSWORD=${DB_PASSWORD} \
+                 PGPASSWORD=${DB_PASSWORD} \
                  psql --host ${DB_HOST} \
-                      --port ${DB_PORT} \ 
+                      --port ${DB_PORT} \
                       --user ${DB_USER} \
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
               done
-          envFrom:
-            - secretRef:
-                name: postgres-secret
-          securityContext:
-            runAsUser: 0
-        - name: pg-consumer-keepalive
-          image: postgres:10
           env:
             - name: DB_HOST
               valueFrom:
@@ -64,6 +57,3 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: DB_NAME
-          securityContext:
-            runAsUser: 0
-          command: ["/bin/sh", "-c", "sleep infinity"]
