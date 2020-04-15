@@ -31,7 +31,6 @@ spec:
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
               done
-          # hard coded for now, we'll wire these up later
           env:
             - name: DB_HOST
               valueFrom:

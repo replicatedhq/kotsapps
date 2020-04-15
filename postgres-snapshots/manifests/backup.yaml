@@ -2,38 +2,22 @@ apiVersion: velero.io/v1
 kind: Backup
 metadata:
   name: backup
+  # Snapshot capabilities only enabled for embedded databases
+  kots.io/when: '{{repl ConfigOptionEquals "postgres_type" "embedded_postgres" }}'
 spec:
   hooks:
     resources:
-    - name: echo-hook
-      includedResources:
-      - 'pods'
-      labelSelector:
-        matchLabels:
-          app: postgres
-          component: nginx
-      pre:
-      - exec:
-          container: nginx
-          command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
-      - exec:
-          container: nginx
-          command: ["/bin/bash", "-c", "head -c 100M </dev/urandom >/scratch/data"]
-          timeout: 3m
-          onError: Continue
     - name: postgres-hook
       includedResources:
       - 'pods'
       labelSelector:
         matchLabels:
-          app: postgres
-          component: nginx
+          app: pg-snapshot
       pre:
       - exec:
-          container: postgresql
           command: ["/bin/bash", "-c", "echo $(date) > /scratch/timestamp"]
       - exec:
-          container: postgresql
-          command: ["/bin/bash", "-c", 'export PGPASSWORD={{repl ConfigOption "postgres_password"}} && pg_dump -U postgres -d my-database -h postgresql > /scratch/backup.sql']
+          # Inject the postgres password into the environment and perform a pg-dump
+          command: ["/bin/bash", "-c", 'export PGPASSWORD=$DB_PASSWORD && pg_dump -U $DB_USER -d $DB_NAME  -h $DB_HOST > /scratch/backup.sql']
           timeout: 3m
           onError: Continue
