@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-hardcoded-ns
+  namespace: hardcoded
+  labels:
+    app: nginx-hardcoded-ns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx-hardcoded-ns
+  template:
+    metadata:
+      labels:
+        app: nginx-hardcoded-ns
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          # you'll need to change this image if you are repurposing this kotsapp
+          # image: registry.replicated.com/multi-namespace/nginx:1.0.0
