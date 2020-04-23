@@ -2,4 +2,4 @@
 **/deps/README.md
 **/deps/replicated
 .DS_Store
-#Makefile
+Makefile
