@@ -1,7 +1,7 @@
 apiVersion: troubleshoot.replicated.com/v1beta1
 kind: Preflight
 metadata:
-  name: example-preflight-checks
+  name: helm-grafana-preflight-checks
 spec:
   analyzers:
     - clusterVersion:
@@ -44,13 +44,6 @@ spec:
           - pass:
               when: "== aks"
               message: AKS is a supported distribution
-          # Will be supported in the future
-          - pass:
-              when: "== kurl"
-              message: KURL is a supported distribution
-          - pass:
-              when: "== digitalocean"
-              message: DigitalOcean is a supported distribution
           - warn:
               message: Unable to determine the distribution of Kubernetes
     - nodeResources:
