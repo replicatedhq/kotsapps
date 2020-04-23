@@ -44,6 +44,8 @@ spec:
           - pass:
               when: "== aks"
               message: AKS is a supported distribution
+          - warn:
+              message: Unable to determine the distribution of Kubernetes
     - nodeResources:
         checkName: Total CPU Cores in the cluster is 2 or greater
         outcomes:
