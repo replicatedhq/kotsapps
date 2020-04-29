@@ -7,5 +7,29 @@ spec:
     name: grafana
     chartVersion: 5.0.13
   values:
+    # Grafana Admin Creds
     adminUser: "repl{{ ConfigOption `admin_user`}}"
     adminPassword: "repl{{ ConfigOption `admin_password`}}"
+    replicas: "repl{{ ConfigOption `grafana_replicas`}}"
+    podLabels:
+      app: grafana
+
+  optionalValues:
+    # Setup Ingress
+    - when: repl{{ ConfigOptionEquals "setup_ingress" "1" }}
+      values:
+        ingress:
+          enabled: true
+          hosts:
+            - "repl{{ ConfigOption `ingress_host`}}"
+    # Setup Prometheus Metrics
+    - when: repl{{ ConfigOptionEquals "setup_metrics" "1" }}
+      values:
+        metrics:
+          enabled: true
+
+  # When building AirGap, metrics needs to be explicitly enabled so the prometheus image can be bundled along. 
+  # Kots does not include the image unless the service is explicitly enabled during the bundle building process.
+  builder:
+    metrics:
+      enabled: true

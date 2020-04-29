@@ -12,7 +12,42 @@ spec:
           title: Admin User
           type: text
           default: 'admin'
+          required: true
         - name: admin_password
           title: Admin Password
           type: password
           default: 'admin'
+          required: true
+        - name: grafana_replicas
+          title: Replicas
+          type: text
+          required: true
+    - name: ingress
+      title: Setup Ingress
+      items:
+        - name: setup_ingress
+          title: Setup Ingress
+          help_text: Set up an Ingress Controller
+          type: bool
+          default: "0"
+        - name: ingress_host
+          title: Ingress Host
+          type: text
+          required: true
+          when: repl{{ ConfigOptionEquals "setup_ingress" "1"}}
+    - name: metrics
+      title: Metrics Configuration
+      items:
+        - name: setup_metrics
+          title: Setup Metrics
+          help_text: Set up a basic Prometheus service
+          type: bool
+          default: "0"
+    - name: redis
+      title: Redis Configuration
+      items:
+        - name: embedded_redis
+          title: Embedded Redis
+          help_text: Set up Embedded Redis Master-Slave
+          type: bool
+          default: "0"
