@@ -1,6 +1,10 @@
 SHELL := /bin/bash -o pipefail
 
+ifeq ($(REPLICATED_APP),)
 app_slug := "$(shell basename $(CURDIR))"
+else
+app_slug := ${REPLICATED_APP}
+endif
 
 # Generate release notes that provide origin details. 
 ifeq ($(origin GITHUB_ACTIONS), undefined)
@@ -75,6 +79,10 @@ check-app:
 list-releases: check-api-token check-app deps-vendor-cli
 	deps/replicated release ls --app $(app_slug)
 
+.PHONY: helm-package
+helm-package: deps-vendor-cli
+	helm package ../. -d manifests/
+
 .PHONY: release
 release: check-api-token check-app deps-vendor-cli lint
 	deps/replicated release create \
@@ -85,6 +93,8 @@ release: check-api-token check-app deps-vendor-cli lint
 		--release-notes $(release_notes) \
 		--ensure-channel
 
+.PHONY: helm-release
+helm-release: helm-package release
 
 # Preserving for backwards compatibility (behavior was merged on release). 
 .PHONY gitsha-release: 
