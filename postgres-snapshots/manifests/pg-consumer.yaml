@@ -30,6 +30,12 @@ spec:
                       --user ${DB_USER} \
                       --dbname ${DB_NAME} \
                       --command 'SELECT NOW()'
+                 PGPASSWORD=${DB_PASSWORD} \
+                 psql --host ${DB_HOST} \
+                      --port ${DB_PORT} \
+                      --user ${DB_USER} \
+                      --dbname ${DB_NAME} \
+                      --command 'SELECT * from users;'
               done
           envFrom:
             - secretRef:
