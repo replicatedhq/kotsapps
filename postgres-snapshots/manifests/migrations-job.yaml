@@ -1,0 +1,51 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrations
+  annotations:
+    "kots.io/hook-delete-policy": "hook-succeeded, hook-failed"
+spec:
+  template:
+    spec:
+      volumes:
+        - name: migrations
+          emptyDir:
+            medium: Memory
+      restartPolicy: OnFailure
+      initContainers:
+        - image: registry.replicated.com/postgres-snapshots/migrations:1.0.0
+          name: migrations-plan
+          volumeMounts:
+            - name: migrations
+              mountPath: /migrations
+          args: ["plan"]
+          env:
+            - name: SCHEMAHERO_DRIVER
+              value: postgres
+            - name: SCHEMAHERO_SPEC_FILE
+              value: /tables
+            - name: SCHEMAHERO_OUT
+              value: /migrations/plan.yaml
+            - name: SCHEMAHERO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: SCHEMAHERO_URI
+      containers:
+        - image: registry.replicated.com/postgres-snapshots/migrations:1.0.0
+          name: migrations-apply
+          volumeMounts:
+            - name: migrations
+              mountPath: /migrations
+          args: ["apply"]
+          env:
+            - name: SCHEMAHERO_DRIVER
+              value: postgres
+            - name: SCHEMAHERO_DDL
+              value: /migrations/plan.yaml
+            - name: SCHEMAHERO_URI
+              valueFrom:
+                secretKeyRef:
+                  name: postgres
+                  key: SCHEMAHERO_URI
+
