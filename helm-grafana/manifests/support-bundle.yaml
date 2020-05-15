@@ -6,3 +6,13 @@ spec:
   collectors:
     - clusterInfo: {}
     - clusterResources: {}
+    - logs:
+        collectorName: grafana-logs
+        name: grafana/logs
+        selector:
+          - app=grafana
+    - logs:
+        collectorName: redis-logs
+        name: redis/logs
+        selector:
+          - app=redis
