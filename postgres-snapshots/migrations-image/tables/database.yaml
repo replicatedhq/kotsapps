@@ -1,0 +1,9 @@
+apiVersion: databases.schemahero.io/v1alpha3
+kind: Database
+metadata:
+ name: postgres
+spec:
+ connection:
+   postgres:
+     uri:
+       value: postgres://schemahero:password@postgresql:5432/github?sslmode=disable
