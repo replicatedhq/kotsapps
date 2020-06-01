@@ -21,7 +21,19 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 * [postgres-snapshots](./postgres-snapshots) : Example showing best practices for integrating an application that requires a PostgreSQL database.
 * [helm-grafana](./helm-grafana) : Example showing how to build a KOTS application using a helm chart. In this case, we use the Grafana helm chart. 
 
-# CONTRIBUTING (Developer Setup)
+# CONTRIBUTING
+
+## Overview of CI
+
+The CI process is as follows: 
+1. When GitHub detects a change within an application's directory, the CI process is started for each application. 
+2. The common makefile is copied to the local application directory, to ensure the same process for each application. 
+3. `make release` is executed on the copied makefile, which performs linting and attempts to make a new release. 
+4. If the release is successful, the CI process passes. 
+
+A common makefile is used in the CI process to ensure consistency across each KOTS application. As such, makefiles in each application directory are ignored in the repository. 
+
+## Developer Setup 
 
 1. Create a fork of this repository.
 2. On your Vendor account (create one, if needed), create an API token from the [Teams and Tokens](https://vendor.replicated.com/team/tokens) page: <p align="center"><img src="./doc/REPLICATED_API_TOKEN.png" width=600></img></p>
