@@ -1,0 +1,30 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: istio
+spec:
+  # chart identifies a matching chart from a .tgz
+  chart:
+    name: istio
+    chartVersion: 1.5.4
+  namespace: istio-system
+  # values are used in the customer environment, as a pre-render step
+  # these values will be supplied to helm template
+  values:
+    gateways:
+      istio-ingressgateway:
+        type: NodePort
+        sds:
+          enabled: true
+        ports:
+          # https://github.com/istio/istio/issues/12503
+          - port: 15020
+            targetPort: 15020
+            name: status-port
+          - port: 80
+            targetPort: 80
+            name: http2
+            nodePort: 80
+          - port: 443
+            name: https
+            nodePort: 443
