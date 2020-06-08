@@ -1,0 +1,30 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "repl{{ ConfigOption `ingress_host`}}"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+  - "repl{{ ConfigOption `ingress_host`}}"
+  gateways:
+  - httpbin-gateway
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        port:
+          number: 8000

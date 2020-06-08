@@ -1,0 +1,18 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - logs:
+        collectorName: istio-logs
+        name: istio/logs
+        selector:
+          - app=istio
+    - logs:
+        collectorName: httpbin-logs
+        name: httpbin/logs
+        selector:
+          - app=httpbin
