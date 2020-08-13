@@ -1,0 +1,15 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: appdirect-config
+spec:
+  groups:
+    - name: display_opts
+      title: Display Options
+      description: Set AppDirect Display Options Below
+      items:
+      - name: page-message-input
+        title: Message to Display
+        help_text: Enter message to display when browsing to msg page
+        type: text
+        default: "This is the default message"

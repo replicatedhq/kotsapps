@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-direct-deployment
+  labels:
+    app: app-direct
+    component: app-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-direct
+      component: app-server
+  template:
+    metadata:
+      labels:
+        app: app-direct
+        component: app-server
+    spec:
+      containers:
+        - name: appdirect
+          image: cremerfc/appdirect:latest
+          ports:
+            - containerPort: 5000
+          env:
+          # Define the environment variable
+          - name: PAGE_MESSAGE
+            valueFrom:
+              configMapKeyRef:
+                # The ConfigMap containing the value you want to assign to SPECIAL_LEVEL_KEY
+                name: appdirect-config-map
+                # Specify the key associated with the value
+                key: PAGE_MESSAGE
