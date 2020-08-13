@@ -1,0 +1,32 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: support-collector
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - copy:
+        name: copy-my-file
+        selector:
+          - app=app-direct
+        namespace: default
+        containerPath: /app/env_vars.txt
+    - http:
+        name: check-test
+        get:
+          url: http://18.222.206.163/test
+    - logs:
+        selector:
+          - app=app-direct
+          - component=app-server
+        limits:
+          maxAge: 30d
+          maxLines: 10000
+    - exec:
+        name: python-version
+        selector:
+          - app=app-direct
+        command: ["python3"]
+        args: ["-V"]
+        timeout: 5s
