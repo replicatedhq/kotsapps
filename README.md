@@ -20,6 +20,7 @@ Manifests of multiple applications, showcasing how easy it is for various applic
 * [initcontainer-logs](./initcontainer-logs) : Example showing how to collect logs from init containers with [Troubleshoot.sh](https://troubleshoot.sh) collectors
 * [postgres-snapshots](./postgres-snapshots) : Example showing best practices for integrating an application that requires a PostgreSQL database.
 * [helm-grafana](./helm-grafana) : Example showing how to build a KOTS application using a helm chart. In this case, we use the Grafana helm chart. 
+* [app-direct](./app-direct) : Sample application used in the [Deploy an HA Cluster](https://kots.io/vendor/guides/ha-guide/) guide.
 
 # CONTRIBUTING
 
