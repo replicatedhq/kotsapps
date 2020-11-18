@@ -1,0 +1,15 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: minrbac-preflight
+spec:
+  title: App Name
+  icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
+  requireMinimalRBACPrivileges: true
+  statusInformers:
+    - deployment/example-nginx
+  ports:
+    - serviceName: "example-nginx"
+      servicePort: 80
+      localPort: 8888
+      applicationUrl: "http://example-nginx"
