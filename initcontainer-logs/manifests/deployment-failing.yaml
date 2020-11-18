@@ -17,17 +17,17 @@ spec:
           command:
             - /bin/sh
             - -c
-            - echo "$(date) I'm First..."; sleep 10; echo "first done"
+            - echo "$(date) I'm First..."; sleep 3; echo "first done"
         - name: second
           image: busybox
           command:
             - /bin/sh
             - -c
-            - echo "$(date) I'm Second"; sleep 10; echo "whoops, something broke!"; exit 1;
+            - echo "$(date) I'm Second"; sleep 3; echo "whoops, something broke!"; exit 1;
       containers:
         - name: third
           image: busybox
           command:
             - /bin/sh
             - -c
-            - while :; do echo "$(date) third container waiting"; sleep 10; done
+            - while :; do echo "$(date) third container waiting"; sleep 3; done

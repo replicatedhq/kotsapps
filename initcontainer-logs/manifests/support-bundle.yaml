@@ -9,17 +9,8 @@ spec:
         selector:
           - app=many-init-containers
         namespace: default
-        containerNames:
-          - first
-          - second
-          - third
-          - fourth
     - logs:
         name: failing-app-logs
         selector:
           - app=failing-init-container
         namespace: default
-        containerNames:
-          - first
-          - second
-          - third
