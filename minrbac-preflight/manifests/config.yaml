@@ -1,0 +1,13 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: minrbac-preflight
+spec:
+  groups:
+    - name: minrbac-preflight
+      title: minrbac-preflight
+      items:
+        - name: run_cluster_preflights
+          type: boolean
+          hidden: true
+          default: '1'
