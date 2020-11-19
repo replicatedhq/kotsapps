@@ -27,8 +27,8 @@ apiVersion: kots.io/v1beta1
 kind: ConfigValues
 spec:
   values:
-    run_cluster_preflights:
-      value: "0"
+    skip_cluster_preflights:
+      value: "1"
 EOF
 
 kubectl kots install $APP_SLUG/$APP_CHANNEL \

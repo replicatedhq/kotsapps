@@ -17,7 +17,7 @@ spec:
           - pass:
               message: Your cluster meets the recommended and required versions of Kubernetes.
     - containerRuntime:
-        exclude: '{{repl not (ConfigOption "run_cluster_preflights") }}'
+        exclude: '{{repl (ConfigOptionEquals "skip_cluster_preflights" "1") }}'
         outcomes:
           - pass:
               when: "== docker"
@@ -25,7 +25,7 @@ spec:
           - fail:
               message: Did not find Docker container runtime.
     - distribution:
-        exclude: '{{repl not (ConfigOption "run_cluster_preflights") }}'
+        exclude: '{{repl (ConfigOptionEquals "skip_cluster_preflights" "1") }}'
         checkName: Check Kubernetes environment.
         outcomes:
           - fail:
@@ -56,7 +56,7 @@ spec:
           - warn:
               message: Unable to determine the distribution of Kubernetes
     - nodeResources:
-        exclude: '{{repl not (ConfigOption "run_cluster_preflights") }}'
+        exclude: '{{repl (ConfigOptionEquals "skip_cluster_preflights" "1") }}'
         checkName: Total CPU Cores in the cluster is 2 or greater
         outcomes:
           - fail:

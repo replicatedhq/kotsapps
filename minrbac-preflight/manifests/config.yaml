@@ -7,7 +7,7 @@ spec:
     - name: minrbac-preflight
       title: minrbac-preflight
       items:
-        - name: run_cluster_preflights
-          type: boolean
+        - name: skip_cluster_preflights
+          type: bool
           hidden: true
-          default: '1'
+          default: '0'
