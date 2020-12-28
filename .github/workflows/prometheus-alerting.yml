@@ -19,7 +19,7 @@ jobs:
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
       id: get_branch
     - name: Debug Environment
-      run: echo ${GITHUB_REF} ${GITHUB_BRANCH} ${GITHUB_BRANCH_NAME} ${GITHUB_TAG_NAME}
+      run: echo ${GITHUB_REF} - ${GITHUB_BRANCH} - ${GITHUB_BRANCH_NAME} - ${GITHUB_TAG_NAME}
       env:
         GITHUB_BRANCH_NAME: ${{ steps.get_branch.outputs.branch }}
         GITHUB_TAG_NAME: ${{ steps.get_tag.outputs.tag }}
