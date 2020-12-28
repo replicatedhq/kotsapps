@@ -1,0 +1,21 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - logs:
+        selector:
+          - app=example
+          - component=nginx
+        namespace: '{{repl Namespace }}'
+    - logs:
+        selector:
+          - app=requestbin
+        namespace: '{{repl Namespace }}'
+    - logs:
+        selector:
+          - app=mailcatcher
+        namespace: '{{repl Namespace }}'
