@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: nginx
+          image: registry.replicated.com/REPLICATED_APP/prometheus-alerting:latest
           resources:
             limits:
               memory: '256Mi'
