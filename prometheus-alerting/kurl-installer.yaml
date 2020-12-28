@@ -20,3 +20,5 @@ spec:
     isCstorEnabled: false
   minio:
     version: latest
+  prometheus:
+    version: latest
