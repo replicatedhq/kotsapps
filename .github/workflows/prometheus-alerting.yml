@@ -30,8 +30,8 @@ jobs:
         docker build -t registry.replicated.com/${REPLICATED_APP}/prometheus-alerting:${GITHUB_SHA::7} prometheus-alerting
         docker push registry.replicated.com/${REPLICATED_APP}/prometheus-alerting:${GITHUB_SHA::7}
 
-        sed -i.bak "s/REPLICATED_APP/${REPLICATED_APP}/g" prometheus-alerting/manifests/deployment.yaml
-        sed -i.bak "s/latest/${GITHUB_SHA::7}/g" prometheus-alerting/manifests/deployment.yaml
+        sed -i.bak "s/REPLICATED_APP/${REPLICATED_APP}/g" prometheus-alerting/manifests/flaky-app.yaml
+        sed -i.bak "s/latest/${GITHUB_SHA::7}/g" prometheus-alerting/manifests/flaky-app.yaml
 
         docker tag registry.replicated.com/${REPLICATED_APP}/prometheus-alerting:${GITHUB_SHA::7} registry.replicated.com/${REPLICATED_APP}/prometheus-alerting:latest
         docker push registry.replicated.com/${REPLICATED_APP}/prometheus-alerting:latest
