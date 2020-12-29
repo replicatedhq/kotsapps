@@ -36,7 +36,9 @@ spec:
   type: ClusterIP
   ports:
     - port: 1025
+      name: smtp
     - port: 1080
+      name: http
   selector:
     app: mailcatcher
 
@@ -54,7 +56,9 @@ spec:
   ports:
     - port: 1025
       nodePort: 1025
+      name: smtp
     - port: 1080
       nodePort: 1080
+      name: http
   selector:
     app: mailcatcher
