@@ -5,15 +5,11 @@ metadata:
   namespace: monitoring
   labels:
     app: flaky-app
+    k8s-app: flaky-app
 spec:
-  jobLabel: flaky-app
   selector:
     matchLabels:
       app: flaky-app
-  namespaceSelector:
-    any: true
   endpoints:
     - port: http
-      interval: 5s
-      scheme: http
-      path: /metrics
+      interval: 15s

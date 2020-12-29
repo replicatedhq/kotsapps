@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: flaky-app
+  namespace: monitoring
   labels:
     app: flaky-app
 spec:
@@ -27,6 +28,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: monitoring
   name: flaky-app
   labels:
     app: flaky-app
@@ -43,6 +45,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: monitoring
   name: flaky-app
   labels:
     app: flaky-app

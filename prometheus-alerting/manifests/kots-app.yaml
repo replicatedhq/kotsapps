@@ -5,7 +5,7 @@ metadata:
 spec:
   title: Prometheus Alerting Example
   statusInformers:
-    - deployment/flaky-app
+    - monitoring/deployment/flaky-app
     - '{{repl if (ConfigOptionEquals "smtp_run_mailcatcher" "1")}}deployment/mailcatcher{{repl end}}'
     - '{{repl if (ConfigOptionEquals "webhook_run_requestbin" "1")}}deployment/requestbin{{repl end}}'
   ports:
