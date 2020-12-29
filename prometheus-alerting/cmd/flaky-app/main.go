@@ -13,19 +13,11 @@ var (
 		Name: "cpu_temperature_celsius",
 		Help: "Current temperature of the CPU.",
 	})
-	hdFailures = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "hd_errors_total",
-			Help: "Number of hard-disk errors.",
-		},
-		[]string{"device"},
-	)
 )
 
 func init() {
 	// Metrics have to be registered to be exposed:
 	prometheus.MustRegister(cpuTemp)
-	prometheus.MustRegister(hdFailures)
 }
 
 func metrics() {
@@ -37,6 +29,29 @@ func metrics() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
+// look I'm not a web developer okay
+const index = `
+<html>
+  <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <body>
+  
+    <div id="mydiv"></div>
+
+    <script type="text/babel">
+      class Hello extends React.Component {
+        render() {
+          return <h1>Hello World!</h1>
+        }
+      }
+
+      ReactDOM.render(<Hello />, document.getElementById('mydiv'))
+    </script>
+  </body>
+</html>
+`
+
 func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet {
@@ -45,7 +60,7 @@ func main() {
 		}
 
 		w.WriteHeader(http.StatusOK)
-		_, _ = w.Write([]byte(`{"msg": "hello, world"}`))
+		_, _ = w.Write([]byte(index))
 	})
 
 
