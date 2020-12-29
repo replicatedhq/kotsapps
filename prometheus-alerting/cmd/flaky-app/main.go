@@ -26,6 +26,7 @@ func main() {
 	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/temp", handleTemp)
 	http.HandleFunc("/healthz", handleHealthz)
+	http.HandleFunc("/favicon.ico", handleHealthz)
 	http.Handle("/metrics", promhttp.Handler())
 
 	log.Print("starting server on :3000")
