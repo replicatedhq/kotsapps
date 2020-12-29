@@ -1,29 +1,50 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: example-nginx
+  name: flaky-app
   labels:
-    app: example
-    component: nginx
+    app: flaky-app
 spec:
   selector:
     matchLabels:
-      app: example
-      component: nginx
+      app: flaky-app
   template:
     metadata:
       labels:
-        app: example
-        component: nginx
+        app: flaky-app
     spec:
       containers:
-        - name: nginx
+        - name: flaky-app
           image: registry.replicated.com/REPLICATED_APP/prometheus-alerting:latest
-          resources:
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
-            requests:
-              memory: '32Mi'
-              cpu: '100m'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaky-app
+  labels:
+    app: flaky-app
+  annotations:
+    kots.io/when: '{{repl (not IsKurl)}}'
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3000
+  selector:
+    app: flaky-app
 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flaky-app
+  labels:
+    app: flaky-app
+  annotations:
+    kots.io/when: '{{repl IsKurl }}'
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+      nodePort: 3000
+  selector:
+    app: flaky-app
