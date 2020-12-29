@@ -1,3 +1,5 @@
-module github.com/replicatedhq/kubecon-na-2020-ring-game/saas-backend
+module github.com/replicatedhq/kotsapps/prometheus-alerting
 
 go 1.15
+
+require github.com/prometheus/client_golang v1.9.0
