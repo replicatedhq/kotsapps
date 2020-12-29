@@ -26,7 +26,7 @@ func main() {
 	http.HandleFunc("/", handleIndex)
 	http.HandleFunc("/temp", handleTemp)
 	http.HandleFunc("/healthz", handleHealthz)
-	http.Handle("/metricz", promhttp.Handler())
+	http.Handle("/metrics", promhttp.Handler())
 
 	log.Print("starting server on :3000")
 	err := http.ListenAndServe(":3000", nil)

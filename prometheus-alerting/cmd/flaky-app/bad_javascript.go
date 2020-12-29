@@ -1,5 +1,6 @@
-// look I'm not a web developer okay
 package main
+
+// look I'm not a web developer okay
 const index = `
 <html>
   <script src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
@@ -34,7 +35,7 @@ const index = `
 		  console.log("clicked decr");
 		  fetch('/temp', {method: "POST", body: "" + (this.state.temp - 1)})
             .then(resp => resp.json())
-			.then(temp => this.setState({ temp: 0 + temp }));
+			.then(temp => this.setState({ temp: temp }));
         }
         render() {
           var color = "white"
@@ -44,7 +45,7 @@ const index = `
           if (this.state.temp > 90) {
             color = "red"
           }
-          return <div style={{background: color}}>
+          return <div style={{background: color, textAlign: "center"}}>
             <h1>
               A Flaky Web App
             </h1>

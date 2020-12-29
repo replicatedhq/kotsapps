@@ -12,6 +12,9 @@ spec:
     metadata:
       labels:
         app: flaky-app
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '3000'
     spec:
       containers:
         - name: flaky-app
