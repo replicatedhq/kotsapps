@@ -1,10 +1,10 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: prometheus-oper-flaky-app
+  name: flaky-app
   namespace: monitoring
   labels:
-    app: prometheus-alerting
+    app: flaky-app
 spec:
   jobLabel: flaky-app
   selector:
