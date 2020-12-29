@@ -5,7 +5,7 @@ metadata:
   labels:
     app: mailcatcher
   annotations:
-    kots.io/when: '{{repl ConfigOptionEquals "smtp_run_mailcatcher" "1"}}'
+    kots.io/when: '{{repl ConfigOption "smtp_run_mailcatcher"}}'
 spec:
   selector:
     matchLabels:
@@ -31,7 +31,7 @@ metadata:
   labels:
     app: mailcatcher
   annotations:
-    kots.io/when: '{{repl and (not IsKurl) (ConfigOptionEquals "smtp_run_mailcatcher" "1") }}'
+    kots.io/when: '{{repl and (not IsKurl) (ConfigOption "smtp_run_mailcatcher") }}'
 spec:
   type: ClusterIP
   ports:
@@ -48,7 +48,7 @@ metadata:
   labels:
     app: mailcatcher
   annotations:
-    kots.io/when: '{{repl and (IsKurl) (ConfigOptionEquals "smtp_run_mailcatcher" "1") }}'
+    kots.io/when: '{{repl and (IsKurl) (ConfigOption "smtp_run_mailcatcher") }}'
 spec:
   type: NodePort
   ports:

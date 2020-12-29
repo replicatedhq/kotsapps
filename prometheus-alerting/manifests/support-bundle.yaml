@@ -8,8 +8,7 @@ spec:
     - clusterResources: {}
     - logs:
         selector:
-          - app=example
-          - component=nginx
+          - app=flaky-app
         namespace: '{{repl Namespace }}'
     - logs:
         selector:

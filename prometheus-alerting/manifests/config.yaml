@@ -32,7 +32,7 @@ spec:
           type: bool
           hidden: true
           readonly: true
-          value: '{{repl and (ConfigOptionEquals "webhook_alert_target" "webhook_target_embedded") (ConfigOptionEquals "enable_webhook_alerts" "1")}}   }}'
+          value: '{{repl and (ConfigOptionEquals "webhook_alert_target" "webhook_target_embedded") (ConfigOptionEquals "enable_webhook_alerts" "1")}}'
         - name: webhook_alert_target_actual
           type: text
           hidden: true
@@ -68,7 +68,7 @@ spec:
           type: bool
           hidden: true
           readonly: true
-          value: '{{repl and (ConfigOptionEquals "smtp_alert_target" "smtp_target_embedded") (ConfigOptionEquals "enable_smtp_alerts" "1")}}   }}'
+          value: '{{repl and (ConfigOptionEquals "smtp_alert_target" "smtp_target_embedded") (ConfigOptionEquals "enable_smtp_alerts" "1")}}'
         - name: smtp_alert_target_actual
           type: text
           hidden: true

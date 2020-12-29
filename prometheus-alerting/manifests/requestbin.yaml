@@ -5,7 +5,7 @@ metadata:
   labels:
     app: requestbin
   annotations:
-    kots.io/when: '{{repl ConfigOptionEquals "webhook_run_requestbin" "1"}}'
+    kots.io/when: '{{repl ConfigOption "webhook_run_requestbin" }}'
 spec:
   selector:
     matchLabels:
@@ -28,7 +28,7 @@ metadata:
   labels:
     app: requestbin
   annotations:
-    kots.io/when: '{{repl and (not IsKurl) (ConfigOptionEquals "webhook_run_requestbin" "1") }}'
+    kots.io/when: '{{repl and (not IsKurl) (ConfigOption "webhook_run_requestbin") }}'
 spec:
   type: ClusterIP
   ports:
@@ -44,7 +44,7 @@ metadata:
   labels:
     app: requestbin
   annotations:
-    kots.io/when: '{{repl and (IsKurl) (ConfigOptionEquals "webhook_run_requestbin" "1") }}'
+    kots.io/when: '{{repl and (IsKurl) (ConfigOption "webhook_run_requestbin") }}'
 spec:
   type: NodePort
   ports:
