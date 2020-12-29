@@ -15,3 +15,5 @@ spec:
   endpoints:
     - port: http
       interval: 5s
+      scheme: http
+      path: /metrics

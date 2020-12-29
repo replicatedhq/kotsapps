@@ -15,6 +15,7 @@ spec:
       annotations:
         prometheus.io/scrape: 'true'
         prometheus.io/port: '3000'
+        prometheus.io/scheme: 'http'
     spec:
       containers:
         - name: flaky-app
