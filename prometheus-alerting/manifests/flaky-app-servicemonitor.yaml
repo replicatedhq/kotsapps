@@ -6,14 +6,13 @@ metadata:
   labels:
     app: flaky-app
     k8s-app: flaky-app
-#    prometheus: k8s
 spec:
-#  namespaceSelector:
-#    matchNames:
-#      - default
+  namespaceSelector:
+    matchNames:
+      - default
   selector:
     matchLabels:
       app: flaky-app
   endpoints:
     - port: http
-      interval: 15s
+      interval: 5s
