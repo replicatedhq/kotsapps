@@ -6,6 +6,7 @@ metadata:
   labels:
     app: flaky-app
     k8s-app: flaky-app
+    prometheus: k8s
 spec:
   selector:
     matchLabels:
