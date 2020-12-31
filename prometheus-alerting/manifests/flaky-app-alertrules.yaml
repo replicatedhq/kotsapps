@@ -13,14 +13,14 @@ spec:
         - alert: HighTemperatureWarning
           annotations:
             message: Alertmanager has found pod {{ $labels.pod }} with unhealthy temperature of {{ $value }}
-          expr: rate(temperature_celsius{container="flaky-app"}[15s])  > 85
+          expr: rate(temperature_celsius{service="flaky-app"}[15s])  > 85
           for: 15s
           labels:
             severity: warning
         - alert: HighTemperatureCritical
           annotations:
             message: Alertmanager has found pod {{ $labels.pod }} with unhealthy temperature of {{ $value }}
-          expr: rate (temperature_celsius{container="flaky-app"}[5s])  > 90
+          expr: rate (temperature_celsius{service="flaky-app"}[5s])  > 90
           for: 5s
           labels:
             severity: critical

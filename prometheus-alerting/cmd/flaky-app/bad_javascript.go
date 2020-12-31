@@ -65,14 +65,14 @@ const index = `
 			<br/>
 			<br/>
             Current Temperature: {this.state.temp}<br/>
-            <button onClick={(e) => this.incrTemp(e)}>+</button>
-            <button onClick={(e) => this.decrTemp(e)}>-</button><br/><br/>
+            <button className="btn btn-info" onClick={(e) => this.decrTemp(e)}>+</button>
+            <button className="btn btn-danger" onClick={(e) => this.incrTemp(e)}>-</button><br/><br/>
 			Warning Temperature: 85<br/>
 			Critical Temperature: 90<br/>
 			<br/><br/><br/>
-            <a href="/metrics"><button>View Raw Metrics</button></a><br/>
-            <a href={this.requestbinURL()}><button>View Requestbin (Webhook Alerts)</button></a><br/>
-            <a href={this.mailcatcherURL()}><button>View Mailcatcher (SMTP Alerts)</button></a><br/>
+            <a href="/metrics"><button className="btn" >View Raw Metrics</button></a><br/>
+            <a href={this.requestbinURL()}><button className="btn">View Requestbin (Webhook Alerts)</button></a><br/>
+            <a href={this.mailcatcherURL()}><button className="btn">View Mailcatcher (SMTP Alerts)</button></a><br/>
 			<br/><br/><br/>
           </div>
         }
