@@ -9,9 +9,9 @@ global:
 receivers:
   - name: "null"
   - name: webhook
-    webhookConfigs:
+    webhook_configs:
       - url: http://requestbin:8000/alerts
-        sendResolved: true
+        send_resolved: true
 route:
   group_by: ["job"]
   group_interval: 5m
