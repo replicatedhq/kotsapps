@@ -57,7 +57,7 @@ const index = `
           if (this.state.temp > 90) {
             color = "red"
           }
-          return <div style={{background: color, textAlign: "center"}}>
+          return <div style={{background: color, textAlign: "center", padding: "5px"}}>
             <h1>
               A Flaky Web App
             </h1>
@@ -65,8 +65,8 @@ const index = `
 			<br/>
 			<br/>
             Current Temperature: {this.state.temp}<br/>
-            <button className="btn btn-info" onClick={(e) => this.decrTemp(e)}>+</button>
-            <button className="btn btn-danger" onClick={(e) => this.incrTemp(e)}>-</button><br/><br/>
+            <button className="btn btn-info" onClick={(e) => this.decrTemp(e)}>-</button>
+            <button className="btn btn-danger" onClick={(e) => this.incrTemp(e)}>+</button><br/><br/>
 			Warning Temperature: 85<br/>
 			Critical Temperature: 90<br/>
 			<br/><br/><br/>
