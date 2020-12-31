@@ -6,7 +6,8 @@ metadata:
     alertmanagerConfig: temperature-alert-webhook
     app: flaky-app
   annotations:
-    kots.io/when: '{{repl ConfigOptionEquals "enable_webhook_alerts" "1"}}'
+#    kots.io/when: '{{repl ConfigOptionEquals "enable_webhook_alerts" "1"}}'
+    kots.io/when: 'false'
 spec:
   route:
     groupBy: ['job']
