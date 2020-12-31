@@ -16,5 +16,6 @@ spec:
     receiver: 'webhook'
   receivers:
     - name: 'webhook'
-      webhook_configs:
+      webhookConfigs:
         - url: 'http://requestbin:8000/alerts'
+          sendResolved: true
