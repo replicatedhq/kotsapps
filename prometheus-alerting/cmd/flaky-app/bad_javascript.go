@@ -42,11 +42,11 @@ const index = `
         }
 		requestbinURL() {
           var url = window.location;
-          return "http://" + url.host + ":8000/alerts?inspect"
+          return "http://" + url.hostname + ":8000/alerts?inspect"
         }
 		mailcatcherURL() {
           var url = window.location;
-          return "http://" + url.host + ":1080"
+          return "http://" + url.hostname + ":1080"
         }
         render() {
           var color = "white"
@@ -69,9 +69,9 @@ const index = `
 			Warning Temperature: 85<br/>
 			Critical Temperature: 90<br/>
 			<br/><br/><br/>
-            <a href="/metrics"><button>View Raw Metrics</button></a>
-            <a href={this.requestbinURL()}><button>View Requestbin (Webhook Alerts)</button></a>
-            <a href={this.mailcatcherURL()}><button>View Mailcatcher (SMTP Alerts)</button></a>
+            <a href="/metrics"><button>View Raw Metrics</button></a><br/>
+            <a href={this.requestbinURL()}><button>View Requestbin (Webhook Alerts)</button></a><br/>
+            <a href={this.mailcatcherURL()}><button>View Mailcatcher (SMTP Alerts)</button></a><br/>
           </div>
         }
       }
