@@ -9,7 +9,7 @@ metadata:
 spec:
   namespaceSelector:
     matchNames:
-      - default
+      - '{{repl Namespace }}'
   selector:
     matchLabels:
       app: flaky-app
