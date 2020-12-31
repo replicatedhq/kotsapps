@@ -29,14 +29,12 @@ const index = `
         }
         incrTemp(e) {
           e.preventDefault();
-		  console.log("clicked incr");
 		  fetch('/temp', {method: "POST", body: "" + (this.state.temp + 1)})
             .then(resp => resp.json())
 			.then(temp => this.setState({ temp: temp }));
         }
         decrTemp(e) {
           e.preventDefault();
-		  console.log("clicked decr");
 		  fetch('/temp', {method: "POST", body: "" + (this.state.temp - 1)})
             .then(resp => resp.json())
 			.then(temp => this.setState({ temp: temp }));
