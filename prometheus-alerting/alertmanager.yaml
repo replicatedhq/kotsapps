@@ -10,7 +10,7 @@ receivers:
   - name: "null"
   - name: webhook
     webhook_configs:
-      - url: http://requestbin:8000/alerts
+      - url: http://requestbin.default:8000/alerts
         send_resolved: true
 route:
   group_by: ["job"]
