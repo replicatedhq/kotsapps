@@ -12,6 +12,12 @@ receivers:
     webhook_configs:
       - url: http://requestbin.default:8000/alerts
         send_resolved: true
+  - name: smtp
+    email_configs:
+      - from: alerts@kots.io
+        send_resolved: true
+        to: admin@somebigbank.com
+        smarthost:
 route:
   group_by: ["job"]
   group_interval: 10s
