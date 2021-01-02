@@ -59,9 +59,9 @@ spec:
           when: repl{{ ConfigOptionEquals "enable_smtp_alerts" "1" }}
         - name: smtp_to
           title: Email Alert To Address
-          help_text: Enter one or more emails, separated by commas, that should receive email alerts
+          help_text: Enter an email address to send alerts to
           type: text
-          default: admin@somebigbank.com,ops@somebigbank.com
+          default: ops@somebigbank.com
           when: repl{{ ConfigOptionEquals "enable_smtp_alerts" "1" }}
         - name: smtp_alert_target
           title: STMP Alert Target
