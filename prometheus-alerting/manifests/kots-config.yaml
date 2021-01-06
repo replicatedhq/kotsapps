@@ -26,7 +26,7 @@ spec:
         - name: webhook_alert_external_addr
           title: Webhook Alert Target
           type: text
-          when: repl{{ ConfigOptionEquals "webhook_alert_target" "webhook_target_external" }}
+          when: repl{{ and (ConfigOptionEquals "webhook_alert_target" "webhook_target_external") (ConfigOptionEquals "enable_webhook_alerts" "1" }}
           default: http://requestbin.net/r/1nc7icz1
         # hidden/RO Webhook Fields
         - name: webhook_run_requestbin

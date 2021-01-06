@@ -68,10 +68,10 @@ const index = `
 			Warning Temperature: 85<br/>
 			Critical Temperature: 90<br/>
 			<br/><br/><br/>
-            <a target="_blank" href="/metrics"><button className="btn" >View Raw Metrics</button></a><br/>
+            <a target="_blank" href="/metrics"><button className="btn" >View Raw Metrics</button></a><br/><br/>
             <a target="_blank" href={this.requestbinURL()}><button className="btn">View Requestbin (Webhook Alerts)</button></a><br/>
             <a target="_blank" href={this.mailcatcherURL()}><button className="btn">View Mailcatcher (SMTP Alerts)</button></a><br/>
-			<br/><br/><br/>
+			<br/><br/>
           </div>
         }
       }
