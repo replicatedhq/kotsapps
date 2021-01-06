@@ -10,6 +10,9 @@ spec:
     - '{{repl if (ConfigOptionEquals "webhook_run_requestbin" "1")}}monitoring/deployment/requestbin{{repl end}}'
   additionalNamespaces:
     - monitoring
+  graphs:
+    - title: Flaky App Temperature (Celsius)
+      query: 'temperature_celsius'
   ports:
     - serviceName: "flaky-app"
       servicePort: 3000

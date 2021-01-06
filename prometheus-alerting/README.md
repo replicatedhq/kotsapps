@@ -24,11 +24,40 @@ Most notably, the applicaiton will expose the value of this temperature at `/met
 
 ### Monitoring Metrics
 
-Service monitor
+Now that we have a metric we can control, it's time to wire it up to prometheus. To do this we need a [ServiceMonitor custom resource](./manifests/flaky-app-servicemonitor.yaml) for the Prometheus operator. We'll deploy this to the `monitoring` namespace so our default prometheus instance will pick it up automatically.
 
-Changing temp
+```shell script
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: flaky-app
+  namespace: monitoring
+  labels:
+    app: flaky-app
+    k8s-app: flaky-app
+spec:
+  namespaceSelector:
+    matchNames:
+      - '{{repl Namespace }}'
+  selector:
+    matchLabels:
+      app: flaky-app
+  endpoints:
+    - port: http
+      interval: 5s
+```
 
-Graphs in Prom
+When this is added to our kots manifests, we should see the prometheus configuration updated with a scrape job for this service:
+
+![prom config](./doc/prom-config.png)
+
+When this configuration is picked up, an additional prometheus target should be available
+
+![prom target](./doc/prom-target.png)
+
+We can now graph the value of value of `temperature_celsius` over time using the graph viewer:
+
+![prom graph](./doc/prom-graph.png)
 
 Graphs in KOTS Dashboard
 
