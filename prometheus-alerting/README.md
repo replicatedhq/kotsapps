@@ -26,7 +26,7 @@ Most notably, the applicaiton will expose the value of this temperature at `/met
 
 Now that we have a metric we can control, it's time to wire it up to prometheus. To do this we need a [ServiceMonitor custom resource](./manifests/flaky-app-servicemonitor.yaml) for the Prometheus operator. We'll deploy this to the `monitoring` namespace so our default prometheus instance will pick it up automatically.
 
-```shell script
+```yaml
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -59,34 +59,126 @@ We can now graph the value of value of `temperature_celsius` over time using the
 
 ![prom graph](./doc/prom-graph.png)
 
-Graphs in KOTS Dashboard
+**Note for completeness** this project notably *does not* add a graph to the KOTS dashboard [as documented on kots.io](https://kots.io/vendor/config/dashboard-graphs/). Doing so *is* encouraged when shipping production applications.
 
 ### Temperature Alerting
 
-Alert Rules CR
+In order to add an alerting rule for this temperature to match our `85` and `90` degree alert thresholds, we'll add the [./manifests/flaky-app-alertrules.yaml](./manifests/flaky-app-alertrules.yaml) alert rules:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: k8s
+    role: alert-rules
+  name: flaky-app-high-temperature
+  namespace: monitoring
+spec:
+  groups:
+    - name: flaky-app-temperature.rules
+      rules:
+        - alert: HighTemperatureWarning
+          annotations:
+            message: Alertmanager has found pod {{ $labels.pod }} with unhealthy temperature of {{ $value }}
+          expr: temperature_celsius{service="flaky-app"} > 85
+          for: 15s
+          labels:
+            severity: warning
+        - alert: HighTemperatureCritical
+          annotations:
+            message: Alertmanager has found pod {{ $labels.pod }} with unhealthy temperature of {{ $value }}
+          expr: temperature_celsius{service="flaky-app"} > 90
+          for: 5s
+          labels:
+            severity: critical
+```
+
+Once this yaml is applied, we should see two alerts in the prometheus dashboard:
+
+![prom-warning](./doc/prom-warning.png)
+
+Navigating to alert manager on `:30903`, we can also see this alert firing in AlertManager:
 
 
-Alerts in Prom
-
-Alerts in 
-
-
+![am-warning](./doc/am-warning.png)
 
 ### Configuring Alert Sinks
 
-Webhooks and SMTP
+By default, no alerts are configured in alert manager. In this project, we'll configure sending alerts to both a webhook sink and an SMTP email sink.
 
-Using RequestBin and Mailcatcher.me to preview
-
-Config Screen
-
-Alert Manager Secret (patch config, may not work with future versions of prometheus) -- alternative CRD method might work, but not tested
+To demonstrate this easily, the project includes an optional [request bin](http://requestbin.net) container to capture and inspect webhook payloads, and a [MailCatcher](https://mailcatcher.me) container to capture and inspect email alerts. We'll take a look at these shortly. For now, the first step is to write our [kots-config.yaml](./manifests/kots-config.yaml) to display these alerting options to the user:
 
 
-Alertmanager rendered config
+![config-none](./doc/config-none.png)
 
-Previewing alerts
+![config-filled](./doc/config-filled.png)
+
+![config-smtp-detail](./doc/config-smtp-detail.png)
 
 
-![app dashboard](./doc/app-dashboard.png)
+To convert this config into something alertmanager understands, we create [alertmanager-secret.yaml](./manifests/flaky-app-alertmanager-secret.yaml) which configures the alerting rules for AlertManager:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alertmanager-main
+  namespace: monitoring
+stringData:
+  alertmanager.yaml: |
+    global:
+      resolve_timeout: 5m
+      smtp_from: {{repl ConfigOption "smtp_from"}}
+      smtp_smarthost: {{repl ConfigOption "smtp_smarthost" | trim }}
+      smtp_auth_username: {{repl ConfigOption "smtp_auth_username" | trim }}
+      smtp_auth_password: {{repl ConfigOption "smtp_auth_password" | trim }}
+      smtp_require_tls: false
+    receivers:
+      - name: "null"
+      - name: webhook
+        webhook_configs:
+          - url: {{repl ConfigOption "webhook_alert_target_actual" | trim }}
+      - name: smtp
+        email_configs:
+          - to: {{repl (ConfigOption "smtp_to") }}
+    route:
+      group_by: ["job"]
+      group_interval: 10s
+      group_wait: 30s
+      receiver: "null"
+      repeat_interval: 5m
+      routes:
+    {{repl if ConfigOptionEquals "enable_webhook_alerts" "1"}}
+        - match:
+            service: flaky-app
+          receiver: webhook
+    {{repl end}}{{repl if ConfigOptionEquals "enable_smtp_alerts" "1"}}
+        - match:
+            service: flaky-app
+          receiver: smtp
+    {{repl end}}
+```
+
+
+Note that this is deployed to the `monitoring` namespace and effectively patches the default AlertManager config that ships with kube-prometheus. An alternative CRD-based AlertManagerConfig method might work, but has not been tested.
+
+Once this is deployed, we can confirm the configuration in AlertManager (it can sometimes take up to 5 minutes to AlertManager to pick up new configuration changes):
+
+![am-config](./doc/am-config.png)
+
+
+To view the actual alerts we can use the links from the flaky-app UI, or the kotsadm dashboard:
+
+
+![app-links](./doc/app-links.png)
+
+In requestbin, we can see the alert payloads:
+
+![request-bin](./doc/request-bin.png)
+
+In mailcatcher, we can see the email alerts:
+
+![mail-catcher](./doc/mail-catcher.png)
+
 

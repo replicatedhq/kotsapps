@@ -85,7 +85,7 @@ spec:
           default: mail-admin
           when: repl{{ ConfigOptionEquals "smtp_alert_target" "smtp_target_external" }}
         - name: smtp_auth_password_field
-          title: SMTP Auth Username
+          title: SMTP Auth Password
           type: password
           required: true
           when: repl{{ ConfigOptionEquals "smtp_alert_target" "smtp_target_external" }}
