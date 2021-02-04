@@ -1,0 +1,29 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: alert-manager-chart
+spec:
+  # chart identifies a matching chart from a .tgz
+  chart:
+    name: alertmanager
+    chartVersion: 0.5.0
+
+  # helmVersion identifies the Helm Version used to render the Chart. Default is v2.
+  helmVersion: v3
+
+  # values are used in the customer environment, as a pre-render step
+  # these values will be supplied to helm template
+  
+  # values:
+
+  # optionalValues:
+  
+  # namespace allows for a chart to be installed in an alternate namespace to
+  # the default
+  
+  # namespace: samplechart-namespace
+
+  # builder values provide a way to render the chart with all images
+  # and manifests. this is used in replicated to create airgap packages
+  
+  # builder:
