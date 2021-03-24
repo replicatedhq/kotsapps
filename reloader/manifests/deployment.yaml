@@ -21,14 +21,11 @@ spec:
       containers:
         - name: nginx
           image: nginx
-          envFrom:
-          - configMapRef:
-              name: example-config
-          resources:
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
-            requests:
-              memory: '32Mi'
-              cpu: '100m'
+          volumeMounts:
+          - name: reloader-config
+            mountPath: "/usr/share/nginx/html"
+      volumes:
+        - name: reloader-config
+          configMap:
+            name: reloader-config
 

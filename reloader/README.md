@@ -143,3 +143,10 @@ curl -sSL https://k8s.kurl.sh/aj-kots-collie-sharkweek-reloader | sudo bash
 ```
 
 The `License.yaml` file is available at the root of this repo.
+
+## Testing the App
+
+Please ensure `Use Ingress?` is checked in Config page of KOTS adm. Once that is checked add some HTML content to `Reloader HTML` text area field. Save the config and deploy the new version of the config from `Version History` page.
+
+Wait 30 seconds and then visit `http://<ingress_ip>/reloader.html` to see the changes from config page.
+

@@ -18,3 +18,15 @@ spec:
           help_text: If desired, enter the hostname for ingress to this application. You can enter the IP of this instance, or a DNS hostname.
           type: text
           when: repl{{ ConfigOptionEquals "use_ingress" "1" }}
+    - name: reloader_settings
+      title: Reloader Settings
+      description: Reloader Settings
+      items:
+        - name: reloader_html
+          title: Reloader HTML
+          help_text: Updates the content in /reloader.html. HTML syntax is supported here.
+          type: textarea
+          props:
+            cols: 16
+            rows: 16
+          when: repl{{ ConfigOptionEquals "use_ingress" "1" }}
