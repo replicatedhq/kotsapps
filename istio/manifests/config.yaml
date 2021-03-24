@@ -1,0 +1,14 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: istio-config
+spec:
+  groups:
+    - name: istio
+      title: Istio
+      description: Istio Configuration
+      items:
+        - name: ingress_host
+          title: Ingress Host
+          type: text
+          default: "*"
