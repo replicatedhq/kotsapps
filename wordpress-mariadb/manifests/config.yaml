@@ -10,21 +10,27 @@ spec:
       - name: wordpress_username
         title: Wordpress Username
         type: text
+        required: true
       - name: wordpress_password
         title: Wordpress Password
         type: password
+        required: true
       - name: wordpress_firstname
         title: Wordpress User First Name
         type: text
+        required: true
       - name: wordpress_lastname
         title: Wordpress User Last Name
         type: text
+        required: true
       - name: wordpress_email
         title: Wordpress User Email
         type: text
+        required: true
       - name: wordpress_blogname
         title: Wordpress Blog Name
         type: text
+        required: true
       - name: wordpress_capacity
         title: Wordpress Capacity
         type: text
