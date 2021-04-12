@@ -4,4 +4,3 @@ This is a sample Kots application that is used in the 'Deploying HA Cluster' gui
 
 
 This directory only contains the Kots related files. The source code and build files for this application are available https://github.com/cremerfc/appdirect.
-
