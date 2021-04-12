@@ -3,7 +3,7 @@ name: Release Prometheus Alerting Demo
 on:
   push:
     paths:
-    - '**'
+    - 'prometheus-alerting/**'
     - '!doc/**'
     - '!**.png'
 
