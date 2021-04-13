@@ -27,24 +27,24 @@ spec:
       containers:
       - env:
         - name: MARIADB_HOST
-          value: wordpress-mariadb
+          value:  '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}wordpress-mariadb{{repl else}}{{repl ConfigOption "external_mariadb_host" }}{{repl end}}'
         - name: MARIADB_PORT_NUMBER
-          value: "3306"
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}3306{{repl else}}{{repl ConfigOption "external_mariadb_port" }}{{repl end}}'
         - name: WORDPRESS_DATABASE_NAME
-          value: bitnami_wordpress
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}{{repl ConfigOption "embedded_mariadb_database"}}{{repl else}}{{repl ConfigOption "external_mariadb_database" }}{{repl end}}'
         - name: WORDPRESS_DATABASE_USER
-          value: bn_wordpress
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}{{repl ConfigOption "embedded_mariadb_user"}}{{repl else}}{{repl ConfigOption "external_mariadb_user" }}{{repl end}}'
         - name: WORDPRESS_DATABASE_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: mariadb-password
+              key: MARIADB_PASSWORD
               name: wordpress-mariadb
         - name: WORDPRESS_USERNAME
           value: '{{repl ConfigOption "wordpress_username"}}'
         - name: WORDPRESS_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: wordpress-password
+              key: WORDPRESS_PASSWORD
               name: wordpress
         - name: WORDPRESS_EMAIL
           value: '{{repl ConfigOption "wordpress_email"}}'

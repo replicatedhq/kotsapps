@@ -38,17 +38,23 @@ spec:
         - name: MARIADB_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: mariadb-root-password
+              key: MARIADB_ROOT_PASSWORD
               name: wordpress-mariadb
         - name: MARIADB_USER
-          value: bn_wordpress
+          valueFrom:
+            secretKeyRef:
+              key: MARIADB_USER
+              name: wordpress-mariadb
         - name: MARIADB_PASSWORD
           valueFrom:
             secretKeyRef:
-              key: mariadb-password
+              key: MARIADB_PASSWORD
               name: wordpress-mariadb
         - name: MARIADB_DATABASE
-          value: bitnami_wordpress
+          valueFrom: 
+            secretKeyRef:
+              key: MARIADB_DATABASE
+              name: wordpress-mariadb
         image: docker.io/bitnami/mariadb:10.3.21-debian-9-r0
         imagePullPolicy: IfNotPresent
         livenessProbe:

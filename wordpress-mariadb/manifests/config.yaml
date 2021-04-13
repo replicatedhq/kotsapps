@@ -38,17 +38,26 @@ spec:
         hidden: true
         
     - name: database
-      title: Database Options
+      title: Database
       items:
         - name: mariadb_type
+          help_text: Would you like to use an embedded mariadb instance, or connect to an external instance that you manage?
           type: select_one
           title: MariaDB
           default: embedded_mariadb
           items:
             - name: embedded_mariadb
-              title: Embedded MariaDB
-            - name: external_mariadb_inline
+              title: Embedded Mariadb
+            - name: external_mariadb
               title: External MariaDB
+        - name: embedded_mariadb_user
+          hidden: true
+          type: text
+          value: "bn_wordpress"
+        - name: embedded_mariadb_database
+          hidden: true
+          type: text
+          value: "bitnami_wordpress"
         - name: embedded_mariadb_password
           hidden: true
           type: password
@@ -58,36 +67,43 @@ spec:
           type: password
           value: "{{repl RandomString 32}}"
         - name: embedded_mariadb_capacity
-          title: MariaDB Database Capacity (1Gi to 10Gi)
+          hidden: true
+          title: MariaDB Database Capacity
           type: text
-          default: "8Gi"
+          value: "8Gi"
+        - name: embedded_mariadb_host
+          hidden: true
+          title: MariaDB Database Host
+          type: text
+          value: "server"
         - name: external_mariadb_host
-          title: MariaDB Host
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+          title: Postgres Host
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: text
           default: mariadb
         - name: external_mariadb_port
           title: MariaDB Port
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: text
           default: "3306"
         - name: external_mariadb_user
           title: MariaDB Username
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: text
           required: true
         - name: external_mariadb_password
           title: MariaDB Password
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: password
           required: true
         - name: external_mariadb_root_password
           title: MariaDB Root Password
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: password
           required: true
-        - name: external_mariadb_db
-          title: MariaDB Database
-          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb_inline"}}'
+        - name: external_mariadb_database
+          title: MariaDB Database Name
+          when: '{{repl ConfigOptionEquals "mariadb_type" "external_mariadb"}}'
           type: text
           default: mariadb
+          required: true
