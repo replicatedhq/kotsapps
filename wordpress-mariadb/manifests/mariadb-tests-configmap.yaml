@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: wordpress-mariadb-tests
+data:
+  run.sh: |-
+    @test "Testing MariaDB is accessible" {
+      mysql -h wordpress-mariadb -uroot -p$MARIADB_ROOT_PASSWORD -e 'show databases;'
+    }

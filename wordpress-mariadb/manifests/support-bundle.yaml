@@ -1,0 +1,40 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Collector
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - exec:
+        collectorName: mariadb-version
+        selector:
+          - app=mariadb
+        namespace: '{{repl Namespace}}'
+        command: ["mysql"]
+        args: ["-V"]
+        timeout: 5s
+    - http:
+        collectorName: wordpress-admin-health
+        get:
+          url: http://wordpress/wp-login.php
+    - http:
+        collectorName: wordpress-health
+        get:
+          url: http://wordpress
+    - logs:
+        collectorName: wordpress-logs
+        selector:
+          - app=wordpress
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 1h
+          maxLines: 10000
+    - logs:
+        collectorName: mariadb-logs
+        selector: 
+          - app=mariadb
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 1h
+          maxLines: 10000

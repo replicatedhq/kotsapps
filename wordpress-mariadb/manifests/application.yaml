@@ -1,0 +1,25 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: "wordpress"
+  labels:
+    app.kubernetes.io/name: "wordpress"
+    app.kubernetes.io/version: "5.6"
+spec:
+  title: Wordpress
+  icon: https://upload.wikimedia.org/wikipedia/commons/9/98/WordPress_blue_logo.svg
+  allowRollback: true
+  selector:
+    matchLabels:
+     app.kubernetes.io/name: "wordpress"
+  componentKinds: []
+  descriptor:
+    version: "5.6"
+    description: "Content management system written in PHP and paired with a MariaDB"
+    icons:
+      - src: "https://upload.wikimedia.org/wikipedia/commons/9/98/WordPress_blue_logo.svg"
+        type: "image/svg"
+    type: "wordpress"
+    links:
+      - description: Open Wordpress
+        url: "http://wordpress"

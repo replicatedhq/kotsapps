@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  labels:
+    app: wordpress
+    release: wordpress
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: wordpress
+      release: wordpress
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: wordpress
+        release: wordpress
+    spec:
+      containers:
+      - env:
+        - name: MARIADB_HOST
+          value:  '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}wordpress-mariadb{{repl else}}{{repl ConfigOption "external_mariadb_host" }}{{repl end}}'
+        - name: MARIADB_PORT_NUMBER
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}3306{{repl else}}{{repl ConfigOption "external_mariadb_port" }}{{repl end}}'
+        - name: WORDPRESS_DATABASE_NAME
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}{{repl ConfigOption "embedded_mariadb_database"}}{{repl else}}{{repl ConfigOption "external_mariadb_database" }}{{repl end}}'
+        - name: WORDPRESS_DATABASE_USER
+          value: '{{repl if ConfigOptionEquals "mariadb_type" "embedded_mariadb"}}{{repl ConfigOption "embedded_mariadb_user"}}{{repl else}}{{repl ConfigOption "external_mariadb_user" }}{{repl end}}'
+        - name: WORDPRESS_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: MARIADB_PASSWORD
+              name: wordpress-mariadb
+        - name: WORDPRESS_USERNAME
+          value: '{{repl ConfigOption "wordpress_username"}}'
+        - name: WORDPRESS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: WORDPRESS_PASSWORD
+              name: wordpress
+        - name: WORDPRESS_EMAIL
+          value: '{{repl ConfigOption "wordpress_email"}}'
+        - name: WORDPRESS_FIRST_NAME
+          value: '{{repl ConfigOption "wordpress_firstname"}}'
+        - name: WORDPRESS_LAST_NAME
+          value: '{{repl ConfigOption "wordpress_lastname"}}'
+        - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
+          value: "no"
+        - name: WORDPRESS_BLOG_NAME
+          value: '{{repl ConfigOption "wordpress_blogname"}}'
+        - name: WORDPRESS_SKIP_INSTALL
+          value: "no"
+        - name: WORDPRESS_TABLE_PREFIX
+          value: wp_
+        - name: WORDPRESS_SCHEME
+          value: http
+        image: docker.io/bitnami/wordpress:5.3.2-debian-9-r0
+        imagePullPolicy: IfNotPresent
+        name: wordpress
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        - containerPort: 443
+          name: https
+          protocol: TCP
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /wp-login.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 120
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /wp-login.php
+            port: http
+            scheme: HTTP
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: 300m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /bitnami/wordpress
+          name: wordpress-data
+          subPath: wordpress
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      volumes:
+      - name: wordpress-data
+        persistentVolumeClaim:
+          claimName: wordpress
