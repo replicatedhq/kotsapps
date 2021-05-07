@@ -1,0 +1,14 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: gooddata
+spec:
+  title: GoodData
+  icon: https://pbs.twimg.com/profile_images/1206636409802706946/6PSZYfL9_400x400.png
+  statusInformers:
+    - deployment/gooddata
+  ports:
+    - serviceName: "gooddata"
+      servicePort: 3000
+      localPort: 3000
+      applicationUrl: "http://gooddata"

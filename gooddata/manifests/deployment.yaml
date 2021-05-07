@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gooddata
+  labels:
+    app: gooddata
+    component: monolith
+spec:
+  selector:
+    matchLabels:
+      app: gooddata
+      component: monolith
+  template:
+    metadata:
+      labels:
+        app: gooddata
+        component: monolith
+    spec:
+      containers:
+        - name: gooddata
+          image: gooddata/gooddata-cn-ce:latest
+          envFrom:
+          - configMapRef:
+              name: example-config
+
