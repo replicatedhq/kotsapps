@@ -6,11 +6,15 @@ metadata:
     app: gooddata
     component: monolith
   annotations:
-    kots.io/when: "{{repl not IsKurl}}"
+    kots.io/when: "{{repl IsKurl}}"
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - port: 3000
+    targetPort: 3000
+    nodePort: 3000
+    protocol: TCP
+    name: gooddata
   selector:
     app: gooddata
     component: monolith
