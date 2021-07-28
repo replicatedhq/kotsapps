@@ -1,0 +1,21 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: config-sample
+spec:
+  groups:
+    - name: polaris_configuration
+      title: Polaris Configuration
+      description: Configuration options for the Polaris dashboard. See the [Polaris documentation](https://polaris.docs.fairwinds.com/customization/configuration/) for more options.
+      items:
+        - name: polaris_use_rbac
+          title: Use RBAC rules?
+          help_text: If checked this will create a `ClusterRole` and `ClusterRolebinding`
+          type: bool
+          default: "0"
+        - name: polaris_rbac_serviceaccount
+          title: Service Account Name
+          help_text: The name of the service account to create.
+          default: "polaris_service_account"
+          type: text
+          when: repl{{ ConfigOptionEquals "polaris_use_rbac" "1" }}
