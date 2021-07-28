@@ -1,0 +1,30 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: polaris
+spec:
+  # chart identifies a matching chart from a .tgz
+  chart:
+    name: polaris
+    chartVersion: 4.0.5
+
+  # exclude: "repl{{ ConfigOptionEquals `include_chart` `include_chart_no`}}"
+
+  # helmVersion identifies the Helm Version used to render the Chart. Default is v2.
+  helmVersion: v3
+
+  # values are used in the customer environment, as a pre-render step
+  # these values will be supplied to helm template
+  values:
+    # rbac:
+    #   # rbac.enabled -- Whether RBAC resources (ClusterRole, ClusterRolebinding) should be created
+    #   enabled: true
+    # serviceAccount:
+    #   # serviceAccount.create -- Specifies whether a service account should be created
+    #   create: true
+    #   # serviceAccount.name -- The name of the service account to use.
+    #   name: bob
+
+  # builder values provide a way to render the chart with all images
+  # and manifests. this is used in replicated to create airgap packages
+  builder:
