@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: amundsenmetadata
+  name: amundsenmetadata
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: amundsenmetadata
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: amundsenmetadata
+    spec:
+      containers:
+        - env:
+            - name: CREDENTIALS_PROXY_PASSWORD
+              value: admin
+            - name: CREDENTIALS_PROXY_USER
+              value: admin
+            - name: METADATA_SVC_CONFIG_MODULE_CLASS
+              value: metadata_service.config.AtlasConfig
+            - name: PROXY_CLIENT
+              value: ATLAS
+            - name: PROXY_ENCRYPTED
+              value: "False"
+            - name: PROXY_HOST
+              value: atlas
+            - name: PROXY_PORT
+              value: "21000"
+          image: amundsendev/amundsen-metadata
+          name: amundsenmetadata
+          ports:
+            - containerPort: 5002
+          resources: {}
+      restartPolicy: Always
+status: {}

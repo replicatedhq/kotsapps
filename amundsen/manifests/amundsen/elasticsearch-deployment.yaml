@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: elasticsearch
+  name: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: elasticsearch
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: elasticsearch
+    spec:
+      containers:
+        - env:
+            - name: discovery.type
+              value: single-node
+          image: elasticsearch:7.13.3
+          name: es-amundsen
+          ports:
+            - containerPort: 9200
+          resources: {}
+          volumeMounts:
+            - mountPath: /usr/share/elasticsearch/data
+              name: es-data
+      restartPolicy: Always
+      volumes:
+        - name: es-data
+          persistentVolumeClaim:
+            claimName: es-data
+status: {}

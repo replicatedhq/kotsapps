@@ -1,0 +1,4 @@
+export REPLICATED_APP=amundsen
+export REPLICATED_API_TOKEN=REPLACE_TOKEN
+export REPLICATED_LICENSE=./todd/license.yaml
+export REPLICATED_OUTPUT=./todd/rendered-files

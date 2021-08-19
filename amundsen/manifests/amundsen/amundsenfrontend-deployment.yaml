@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: amundsenfrontend
+  name: amundsenfrontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: amundsenfrontend
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: amundsenfrontend
+    spec:
+      containers:
+        - env:
+            - name: METADATASERVICE_BASE
+              value: http://amundsenmetadata:5002
+            - name: SEARCHSERVICE_BASE
+              value: http://amundsensearch:5001
+          image: amundsendev/amundsen-frontend
+          name: amundsenfrontend
+          ports:
+            - containerPort: 5000
+          resources: {}
+      restartPolicy: Always
+status: {}

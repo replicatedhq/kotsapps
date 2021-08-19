@@ -1,0 +1,27 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: config-sample
+spec:
+  groups:
+    - name: amundsen_configuration
+      title: Amundsen Configuration
+      description: Configuration options for Amundsen. See the [Amundsen documentation](https://www.amundsen.io/amundsen/) for more options.
+      items:
+        - name: datastore_selection
+          default: datastore_atlas
+          type: select_one
+          items:
+          - name: datastore_neo4j
+            title: Neo4j
+          - name: datastore_atlas
+            title: Atlas
+
+    - name: install_data
+      title: Install Sample Data
+      description: This will install sample data
+      items:
+      - name: install_sample_data
+        title: Install Sample Data?
+        type: bool
+        default: "0"

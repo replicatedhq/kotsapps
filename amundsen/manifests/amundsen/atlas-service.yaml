@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: atlas
+  name: atlas
+spec:
+  ports:
+    - name: "21000"
+      port: 21000
+      targetPort: 21000
+  selector:
+    service: atlas
+status:
+  loadBalancer: {}

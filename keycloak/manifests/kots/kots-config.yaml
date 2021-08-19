@@ -1,0 +1,48 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: keycloak_configuration
+spec:
+  groups:
+    - name: general
+      title: General Configuration
+      description: Configuration options for Keycloak. See the [Keycloak documentation](https://github.com/keycloak/keycloak) for more info.
+      items:
+
+        - name: install_external_database
+          title: Install an external database for Keycloak?
+          type: bool
+          default: "0"
+
+        - name: h2_database
+          type: label
+          title: "Note: KeyCloak will use the internal H2 database by default."
+          when: '{{repl (ConfigOptionEquals "install_external_database" "0")}}' 
+
+      # - name: external_database
+      #   title: External Database
+      #   description: "Select an external database to install"
+      #   # when: '{{repl (ConfigOptionEquals "install_external_database" "1")}}'
+      #   items:
+        - name: external_database_type
+          default: database_postgres
+          type: select_one
+          # when: '{{repl (ConfigOptionEquals "install_external_database" "1")}}'
+          items:
+          - name: database_postgres
+            title: Postgres Database
+          - name: database_mysql
+            title: MySQL Database
+          - name: database_maria
+            title: MariaDB Database
+        # when: '{{repl (ConfigOptionEquals "install_external_database" "1")}}'
+
+        - name: install_vault_secrets
+          title: Install Vault for external secrets?
+          type: bool
+          default: "0"
+
+        - name: install_keycloak_ingress
+          title: Install Ingress for Keycloak?
+          type: bool
+          default: "0"

@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1 Ingress
+kind: Ingress
+metadata:
+  name: keycloak
+  annotations: 
+    "kots.io/exclude": '{{repl ConfigOptionEquals "install_keycloak_ingress" "0" }}'
+spec:
+  tls:
+    - hosts:
+      - KEYCLOAK_HOST
+  rules:
+  - host: KEYCLOAK_HOST
+    http:
+      paths:
+      - backend:
+          serviceName: keycloak
+          servicePort: 8080

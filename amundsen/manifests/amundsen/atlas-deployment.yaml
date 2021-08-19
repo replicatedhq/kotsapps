@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: atlas
+  name: atlas
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: atlas
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: atlas
+    spec:
+      containers:
+        - env:
+            - name: ATLAS_KICKSTART_AMUNDSEN
+              value: "true"
+          image: wbaa/rokku-dev-apache-atlas:0.1.5
+          name: atlas
+          ports:
+            - containerPort: 21000
+          resources: {}
+      restartPolicy: Always
+status: {}

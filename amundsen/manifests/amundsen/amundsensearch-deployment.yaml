@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: amundsensearch
+  name: amundsensearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: amundsensearch
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        service: amundsensearch
+    spec:
+      containers:
+        - env:
+            - name: PROXY_ENDPOINT
+              value: es_amundsen_atlas
+          image: amundsendev/amundsen-search
+          name: amundsensearch
+          ports:
+            - containerPort: 5001
+          resources: {}
+      restartPolicy: Always
+status: {}
