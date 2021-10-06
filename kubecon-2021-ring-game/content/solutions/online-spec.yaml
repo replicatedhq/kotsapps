@@ -1,0 +1,57 @@
+apiVersion: troubleshoot.sh/v1beta2
+kind: SupportBundle
+metadata:
+  name: collector-sample
+spec:
+  collectors:
+    - clusterInfo: {}
+    - clusterResources: {}
+    - logs:
+        selector:
+          - app=kubecon-game
+        namespace: '{{repl Namespace }}'
+        limits:
+          maxAge: 30d
+          maxLines: 10000
+    - exec:
+        name: check-config
+        collectorName: check-config
+        selector:
+          - app=file-check-pod
+        namespace: '{{repl Namespace}}'
+        args:
+        - stat
+        - -c
+        - "%a"
+        - /etc/ring-game/config.txt
+    - exec:
+        name: check-restrain
+        collectorName: check-restrain
+        selector:
+          - app=file-check-pod
+        namespace: '{{repl Namespace}}'
+        args:
+        - stat
+        - -c
+        - "%a"
+        - /etc/ring-game/restraining-bolt.txt.txt    
+  analyzers:
+    - textAnalyze:
+        checkName: Config Check
+        fileName: check-config/{{repl Namespace}}/*/check-config-*.txt
+        regex: '400'
+        outcomes:
+          - pass:
+              message: Found Config File!!!
+          - fail:
+              message: Config file not found. Please check this [article](https://github.com/replicatedhq/kotsapps/blob/kc2021-ring-game/kubecon-2021-ring-game/content/solutions/easysolve.md)
+    - textAnalyze:
+        checkName: Restrain Check
+        fileName: check-restrain/{{repl Namespace}}/*/check-restrain-*.txt
+        regex: '400'
+        outcomes:
+          - pass:
+              message: Found Restraint File!!!
+          - fail:
+              message: Restrain file not found. Please check this [article](https://github.com/replicatedhq/kotsapps/blob/kc2021-ring-game/kubecon-2021-ring-game/content/solutions/hardsolve.md)
+            
