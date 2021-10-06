@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kubecon-game
+  labels:
+    app: kubecon-game
+    component: nginx
+  annotations:
+    kots.io/when: '{{repl ConfigOptionEquals "game_options" "easy_level"}}'  
+spec:
+  selector:
+    matchLabels:
+      app: kubecon-game
+      component: nginx
+  template:
+    metadata:
+      labels:
+        app: kubecon-game
+        component: nginx
+    spec:
+      initContainers:
+        - name: check-file
+          image: busybox
+          command:
+            - /bin/sh
+            - -ec
+            - | 
+              perms=$(stat -c "%a" /etc/ring-game/config.txt)
+              if [ "$perms" -ne "400" ]; then echo missing config; exit 1; fi
+          volumeMounts:
+            - mountPath: /etc/ring-game
+              name: config
+      containers:
+        - name: game
+          image: registry.replicated.com/ringquestapp/easy-{{repl ConfigOption "lab_type"}}:latest
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+            requests:
+              memory: '32Mi'
+              cpu: '100m'
+      volumes:
+        - name: config
+          hostPath:
+            path: /etc/ring-game/    
+

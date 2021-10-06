@@ -1,0 +1,28 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: game-config
+spec:
+  groups:
+    - name: game_level_options
+      description: You're very close to completing your quest! Please choose the difficulty level you'd like to try!
+      items:
+        - name: lab_type
+          title: Lab Type
+          type: select_one
+          default: irl
+          items:
+            - name: irl
+              title: Attending Lab in person at Kubecon
+            - name: virtual
+              title: Attending Lab virtually
+        - name: game_options
+          title: Difficulty Levels
+          help_text: Select the difficulty level you'd like to try!
+          type: select_one
+          default: easy_level
+          items:
+            - name: easy_level
+              title: Easy - Complete this task and earn your own Kubernetes Ring!
+            - name: hard_level
+              title: Hard - Complete this task and earn your own Kubernetes Ring AND your choice of a Replicated headband or Hoodie!

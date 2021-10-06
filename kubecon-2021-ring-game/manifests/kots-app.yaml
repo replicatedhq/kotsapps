@@ -1,0 +1,16 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: ring-of-kubernetes
+spec:
+  title: Quest for the Ring of Kubernetes
+  icon: https://kubecomics.com/images/shield.png
+  requireMinimalRBACPrivileges: true
+  statusInformers:
+    - deployment/kubecon-game
+    - service/kubecon-game
+  ports:
+    - serviceName: "kubecon-game"
+      servicePort: 3000
+      localPort: 8080
+      applicationUrl: "http://kubecon-game"
