@@ -1,4 +1,4 @@
-FROM golang:1.15 as build
+FROM golang:1.17 as build
 ADD . /go/src/github.com/replicatedhq/kotsapps/prometheus-alerts
 RUN go install /go/src/github.com/replicatedhq/kotsapps/prometheus-alerts/cmd/flaky-app
 
