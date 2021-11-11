@@ -5,12 +5,14 @@ metadata:
 spec:
   groups:
     - name: game_level_options
-      description: You're very close to completing your quest! Please choose the difficulty level you'd like to try!
+      title: Quest for the Ring of Kubernetes App Options
+      description: You're almost ready to get started on your quest!
       items:
         - name: lab_type
           title: Lab Type
+          hidden: true
           type: select_one
-          default: irl
+          default: virtual
           items:
             - name: irl
               title: Attending Lab in person at Kubecon
@@ -18,11 +20,11 @@ spec:
               title: Attending Lab virtually
         - name: game_options
           title: Difficulty Levels
-          help_text: Select the difficulty level you'd like to try!
+          help_text: Please choose the difficulty level you'd like to try!
           type: select_one
           default: easy_level
           items:
             - name: easy_level
               title: Easy - Complete this task and earn your own Kubernetes Ring!
             - name: hard_level
-              title: Hard - Complete this task and earn your own Kubernetes Ring AND your choice of a Replicated headband or Hoodie!
+              title: Hard - Complete this task and earn your own Kubernetes Ring AND your choice of a Replicated Headband or Hoodie!

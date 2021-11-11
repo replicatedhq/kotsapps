@@ -52,7 +52,7 @@ spec:
               name: config
       containers:
         - name: game
-          image: registry.replicated.com/ringquestapp/hard-{{repl "lab_type"}}:latest
+          image: registry.replicated.com/ringquestapp/hard-{{repl ConfigOption "lab_type"}}:latest
           resources:
             limits:
               memory: '256Mi'
