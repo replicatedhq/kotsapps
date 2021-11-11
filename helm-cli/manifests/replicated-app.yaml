@@ -1,0 +1,21 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: app-slug
+spec:
+  title: Grafana Kots Helm Deployer
+  icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/kubernetes/icon/color/kubernetes-icon-color.png
+  requireMinimalRBACPrivileges: false
+  # Since KOTS doesn't know about the chart nor the containers it needs, we need to add them here below
+  # Only contains images specified in values.yaml (images in default commented out sections not included)
+  additionalImages: 
+    - grafana/grafana:7.3.5
+    - bats/bats:v1.1.0
+    - curlimages/curl:7.73.0
+    - busybox:1.31.1
+    - kiwigrid/k8s-sidecar:1.1.0
+    - grafana/grafana-image-renderer:latest
+
+
+  statusInformers:
+    - deployment/grafana

@@ -1,0 +1,32 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kots-helm-cli
+  annotations:
+    "kots.io/hook-delete-policy": "hook-succeeded, hook-failed"
+  labels:
+    app: kots-helm-cli
+spec:
+  template:
+    metadata:
+      labels:
+        app: kots-helm-cli
+    spec:
+      serviceAccountName: kotsadm
+      automountServiceAccountToken: true
+      containers:
+        - name: kots-helm-cli
+          image: cremerfc/helm-cli:3.2.4.4
+          command: ["/bin/sh"]
+          args: ["-c", "helm upgrade --install grafana /apps/grafana-6.1.16.tgz -f kots-values.yaml"]
+          terminationMessagePolicy: FallbackToLogsOnError
+          volumeMounts:
+          - name: values-volume
+            mountPath: /apps/kots-values.yaml
+            subPath: kots-values.yaml
+      volumes:
+        - name: values-volume
+          configMap:
+            name: helm-values-config-map
+      restartPolicy: Never
+  backoffLimit: 3    

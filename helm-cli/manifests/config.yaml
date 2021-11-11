@@ -1,0 +1,24 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: config-sample
+spec:
+  groups:
+    - name: example_settings
+      title: Grafana Settings
+      description: Please provide the following
+      items:
+        - name: default_settings
+          title: Use Default Settings?
+          help_text: Uncheck box to override default settings
+          type: bool
+          default: "1"
+        - name: enable_persistence
+          title: Enable Persistence Volume
+          help_text: This option will create persistent storage (see http://someurl.com for mo info)
+          type: bool
+          when: repl{{ ConfigOptionEquals "default_settings" "0" }}
+        - name: enable_test_framework
+          title: Enable Test Framework?
+          type: bool
+          default: "1"

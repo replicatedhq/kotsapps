@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: example-service
+  labels:
+    app: kots-helm-cli
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+  selector:
+    app: kots-helm-cli
