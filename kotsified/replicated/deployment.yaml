@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: multiprem-web
+  labels:
+    app: multiprem-web
+    role: web
+spec:
+  replicas: repl{{ LicenseFieldValue "replicas" }}
+  selector:
+    matchLabels:
+      app: multiprem
+      role: web
+  template:
+    metadata:
+      labels:
+        app: multiprem
+        role: web
+    spec:
+      containers:
+        - name: multiprem
+          env:
+            - name: MULTIPREM_LOGO
+              value: repl{{ ConfigOption "logo" }}
+            - name: POSTGRES_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_database
+            - name: POSTGRES_HOSTNAME
+              value: repl{{ ConfigOption "postgres_hostname" }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_password
+            - name: POSTGRES_PORT
+              value: '{{repl ConfigOption "postgres_port" }}'
+            - name: POSTGRES_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_username
+          image: registry.replicated.com/{{repl LicenseFieldValue "appSlug" }}/multiprem:{{repl ChannelName }}
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+      serviceAccountName: multiprem

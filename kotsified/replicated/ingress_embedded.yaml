@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: multiprem
+  annotations:
+    kots.io/exclude: repl{{ (not IsKurl) }}
+    kubernetes.io/ingress.allow-http: '{{repl ConfigOptionEquals "allow_http" "1" }}'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: '{{repl ConfigOptionEquals "allow_http" "1" | not }}'
+spec:
+  tls:
+    - hosts:
+        - repl{{ ConfigOption "hostname" }}
+      secretName: kotsadm-tls
+  rules:
+    - host: repl{{ or (ConfigOption "hostname") "~" }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: multiprem-web
+                port:
+                  number: 3000

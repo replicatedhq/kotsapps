@@ -1,0 +1,10 @@
+apiVersion: troubleshoot.sh/v1beta2
+kind: Redactor
+metadata:
+  name: multiprem
+spec:
+  redactors:
+    - name: Replace super secret info
+      removals:
+        values:
+          - HIDEME

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: multiprem-postgres
+  annotations:
+    kots.io/when: '{{repl ConfigOptionEquals "postgres_hostname" "multiprem-postgres"}}'
+  labels:
+    app: multiprem
+    role: postgres
+spec:
+  replicas: 1
+  serviceName: multiprem-postgres
+  selector:
+    matchLabels:
+      app: multiprem
+      role: postgres
+  template:
+    metadata:
+      labels:
+        app: multiprem
+        role: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:latest
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_database
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_password
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: multiprem
+                  key: postgres_username
+          ports:
+            - containerPort: 5432
+              name: postgres
+          volumeMounts:
+            - name: postgres
+              mountPath: /var/lib/postgresql/data
+              subPath: postgres
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+
+

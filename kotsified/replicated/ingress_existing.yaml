@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: multiprem
+  annotations:
+    kots.io/exclude: repl{{ IsKurl }}
+    kubernetes.io/ingress.allow-http: '{{repl ConfigOptionEquals "allow_http" "1" }}'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: '{{repl ConfigOptionEquals "allow_http" "1" | not }}'
+spec:
+  rules:
+    - host: repl{{ or (ConfigOption "hostname") "~" }}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: multiprem
+              servicePort: 3000

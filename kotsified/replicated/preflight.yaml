@@ -1,0 +1,123 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: Preflight
+metadata:
+  name: multiprem
+spec:
+  analyzers:
+    - nodeResources:
+        checkName: Cluster Node Count
+        outcomes:
+          - fail:
+              when: "count() < 3"
+              message: Multi-Prem requires at least 3 nodes, with 5 recommended
+              uri: https://kurl.sh/docs/install-with-kurl/adding-nodes
+          - warn:
+              when: "count() < 5"
+              message: Multi-Prem requires at least 3 nodes, with 5 recommended
+              uri: https://kurl.sh/docs/install-with-kurl/adding-nodes
+          - pass:
+              message: This cluster has enough nodes
+    - nodeResources:
+        checkName: Cluster Memory
+        outcomes:
+          - fail:
+              when: "sum(memoryAllocatable) < 10Gi"
+              message: Multi-Prem requires 10Gi allocatable memory, with 32Gi recommended
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - warn:
+              when: "sum(memoryAllocatable) < 32Gi"
+              message: Multi-Prem requires 10Gi allocatable memory, with 32Gi recommended
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: Cluster has at least 32 Gi of memory
+    - nodeResources:
+        checkName: Cluster CPU
+        outcomes:
+          - fail:
+              when: "sum(cpuCapacity) < 4"
+              message: The cluster must contain at least 4 cores
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: There are at least 4 cores in the cluster
+    - nodeResources:
+        checkName: Node Ephemeral Storage
+        outcomes:
+          - fail:
+              when: "min(ephemeralStorageAllocatable) < 40Gi"
+              message: Multi-Prem requires 40GB of allocatable ephemeral storage per node, (100GB recommended)
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - warn:
+              when: "min(ephemeralStorageAllocatable) < 100Gi"
+              message: Multi-Prem requires 40GB of allocatable ephemeral storage per node, (100GB recommended)
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: All nodes have at least 100 GB of allocatable ephemeral storage
+    - distribution:
+        outcomes:
+          - fail:
+              when: "== docker-desktop"
+              message: The application does not support Docker Desktop Clusters
+          - fail:
+              when: "== microk8s"
+              message: The application does not support Microk8s Clusters
+          - fail:
+              when: "== minikube"
+              message: The application does not support Minikube Clusters
+          - pass:
+              when: "== eks"
+              message: EKS is a supported distribution
+          - pass:
+              when: "== gke"
+              message: GKE is a supported distribution
+          - pass:
+              when: "== aks"
+              message: AKS is a supported distribution
+          - pass:
+              when: "== kurl"
+              message: KURL is a supported distribution
+          - pass:
+              when: "== digitalocean"
+              message: DigitalOcean is a supported distribution
+          - warn:
+              message: Unable to determine the distribution of Kubernetes
+    - clusterVersion:
+        checkName: Kubernetes Version
+        outcomes:
+          - fail:
+              when: "< 1.18.0"
+              message: Multi-Prem requires at Kubernetes 1.18.0 or later, and recommends 1.19.0
+              uri: https://www.kubernetes.io
+          - warn:
+              when: "< 1.19.0"
+              message: Your cluster meets the minimum version of Kubernetes, but we recommend you update to 1.19.0 or later
+              uri: https://kubernetes.io
+          - pass:
+              when: ">= 1.19.0"
+              message: Your cluster meets the recommended and required versions of Kubernetes
+    - containerRuntime:
+        checkName: Container Runtime
+        outcomes:
+          - pass:
+              when: "== docker"
+              message: Docker is a supported runtime
+          - pass:
+              when: "== containerd"
+              message: containerd is a supported runtime
+          - fail:
+              message: Multi-Prem only supports docker and containerd as container runtimes
+    - storageClass:
+        checkName: Storage Class
+        storageClassName: "default"
+        outcomes:
+          - fail:
+              message: Could not find a storage class called default
+          - pass:
+              message: Default storage class found
+    - customResourceDefinition:
+        customResourceDefinitionName: httpproxies.projectcontour.io
+        checkName: IngressRoute CRD
+        outcomes:
+          - fail:
+              message: httpproxies.projectcontour.io CRD not present
+          - pass:
+              message: httpproxies.projectcontour.io CRD available

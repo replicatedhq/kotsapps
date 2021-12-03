@@ -1,0 +1,59 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: multiprem
+spec:
+  groups:
+    - name: web
+      title: Multi-Prem Web
+      description: Multi-Prem Web Config
+      items:
+        - name: hostname
+          type: text
+          title: Hostname
+          help_text: |
+            The hostname to have Multi-Prem reachable under.
+          required: true
+        - name: allow_http
+          type: bool
+          title: Allow HTTP access
+          help_text: |
+            Uncheck this box to enforce HTTPS.
+          default: "1"
+        - name: logo
+          title: Logo
+          help_text: |
+            Logo to display in the application.
+          type: text
+          default: '{{repl LicenseFieldValue "logo" }}'
+        - name: postgres_hostname
+          title: PostgreSQL Hostname
+          type: text
+          help_text: |
+            The hostname for a PostgreSQL instance.
+          default: multiprem-postgres
+        - name: postgres_database
+          title: PostgreSQL Database
+          type: text
+          help_text: |
+            The database to use from a PostgreSQL instance.
+          default: multiprem
+        - name: postgres_port
+          title: PostgreSQL Port
+          type: text
+          help_text: |
+            The listening port for a PostgreSQL instance.
+          default: "5432"
+        - name: postgres_username
+          title: PostgreSQL Username
+          help_text: |
+            The username for a PostgreSQL instance user.
+          type: text
+          default: multiprem
+        - name: postgres_password
+          title: PostgreSQL Password
+          help_text: |
+            The password for a PostgreSQL instance user.
+          type: text
+          default: multiprem
+

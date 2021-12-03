@@ -1,0 +1,105 @@
+apiVersion: troubleshoot.sh/v1beta2
+kind: SupportBundle
+metadata:
+  name: multiprem
+spec:
+  collectors:
+    - secret:
+        name: multiprem-postgres
+        key: postgres_database
+        includeValue: false
+    - logs:
+        collectorName: multiprem-web
+        name: multiprem-web
+        selector:
+          - app=multiprem
+          - role=web
+    - run:
+        collectorName: ping-google
+        image: flungo/netutils
+        command: ["ping"]
+        args: ["www.google.com"]
+        timeout: 5s
+    - http:
+        collectorName: echo-ip
+        get:
+          url: https://api.replicated.com/market/v1/echo/ip
+  analyzers:
+    - ingress:
+        ingressName: multiprem
+        namespace: '{{repl Namespace}}'
+        outcomes:
+          - fail:
+              message: multiprem ingress is missing or not ready.
+          - pass:
+              message: multiprem ingress is ready.
+    - deploymentStatus:
+        name: multiprem-web
+        namespace: '{{repl Namespace}}'
+        outcomes:
+          - fail:
+              when: "< 1"
+              message: "multiprem-web does not have any active pods."
+          - warn:
+              when: "= 1"
+              message: "multiprem-web has only a one active pod."
+          - pass:
+              message: multiprem-web has multiple active pods.
+    - statefulsetStatus:
+        name: multiprem-postgres
+        namespace: '{{repl Namespace}}'
+        outcomes:
+          - fail:
+              when: "< 1"
+              message: multiprem-postgres does not have any active pods.  Please redeploy the application.`
+          - pass:
+              message: multiprem-postgres has an active pod.
+    - clusterVersion:
+        outcomes:
+          - fail:
+              when: "< 1.18.0"
+              message: Multi-Prem requires at Kubernetes 1.13.0 or later, and recommends 1.15.0.
+              uri: https://www.kubernetes.io
+          - warn:
+              when: "< 1.19.0"
+          - pass:
+              message: "Your version of Kubernetes is OK"
+    - nodeResources:
+        checkName: Allocatable Storage
+        outcomes:
+          - fail:
+              when: "max(ephemeralStorageAllocatable) < 10Gi"
+              message: No node has more than 10Gi storage allocatable
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - warn:
+              when: "max(ephemeralStorageAllocatable) < 20Gi"
+              message: No node has more than 20Gi storage allocatable
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: All nodes have at least 20 GB of allocatable ephemeral storage.
+    - nodeResources:
+        checkName: Allocatable Memory
+        outcomes:
+          - fail:
+              when: "max(memoryAllocatable) < 1Gi"
+              message: All nodes have less than 1Gi allocatable memory
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - warn:
+              when: "max(memoryAllocatable) < 2Gi"
+              message: All nodes have less than 2Gi allocatable memory
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: All nodes have at least 2 Gi of allocatable memory
+    - nodeResources:
+        checkName: Allocatable CPU
+        outcomes:
+          - fail:
+              when: "max(cpuAllocatable) < 500m"
+              message: All nodes have less than 500m allocatable CPU
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - warn:
+              when: "max(cpuAllocatable) < 1"
+              message: All nodes have less than 1 allocatable CPU
+              uri: https://kurl.sh/docs/install-with-kurl/system-requirements
+          - pass:
+              message: All nodes have at least 1 allocatable CPUs

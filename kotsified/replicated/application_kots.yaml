@@ -1,0 +1,13 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: multiprem
+spec:
+  allowRollback: true
+  graphs: #TODO
+  icon: https://www.replicated.com/wp-content/uploads/2021/07/multi-environment-deploys.svg
+  releaseNotes: Improvements and bugfixes
+  statusInformers:
+    - deployment/multiprem-web
+    - statefulset/multiprem-postgres
+  title: Multi-Prem

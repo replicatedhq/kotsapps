@@ -1,0 +1,29 @@
+$script = <<-SCRIPT
+systemctl enable --now systemd-timesyncd
+curl https://kurl.sh/f235fdb | sudo bash
+SCRIPT
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+
+  config.vm.disk :disk, size: "40GB", primary: true
+
+  # contour http
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # contour https
+  config.vm.network "forwarded_port", guest: 443, host: 8443
+
+  # kotsadm console
+  config.vm.network "forwarded_port", guest: 8800, host: 8800
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 4
+    vb.customize [ "modifyvm", :id, "--uart1", "off" ]
+    vb.memory = 8096
+  end
+
+  config.vm.provision "shell", inline: $script
+
+  config.vm.synced_folder '.', '/vagrant', disabled: true
+end
