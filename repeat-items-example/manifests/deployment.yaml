@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-nginx
+  labels:
+    app: variadic_example
+spec:
+  selector:
+    matchLabels:
+      app: variadic_example
+  template:
+    metadata:
+        labels:
+          app: variadic_example
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: repl{{ ConfigOption "[[repl .nginx ]]" | ParseInt }}
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+            requests:
+              memory: '32Mi'
+              cpu: '100m'
