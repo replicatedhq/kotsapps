@@ -4,7 +4,7 @@ This is a sample application that shows an example of using [repeatable items](h
 
 In this example, we are using repeatable items to provide one or more ports to use for our `nginx` deployment as well as the corresponding `service`.
 
-First, we define our config fields per the documentation:
+First, we define our config fields per the documentation. Here is a snippet of the [config.yaml](/manifests/config.yaml) file:
 
 ```yaml
 
@@ -31,3 +31,27 @@ First, we define our config fields per the documentation:
               nginx-port: "80"
 
 ```
+In the yaml above, we have defined two templates. Each one of these has a corresponding manifest that matches the `apiVersion`, `kind`, and `name`. The `yamlPath` is the yaml path to where the value shuld go. In our case, we are targetting an array field called `ports`.
+
+So to summarize, the definition in the `config.yaml` file is for one field that can be repeatable. The value(s) from this field will be populated in both a `deployment` and `service` manifests.
+
+Below is a snippet of the nginx deployment that has the templating needed to use the value from the repeatable items:
+
+``` yaml
+
+spec:
+  selector:
+    matchLabels:
+      app: variadic_example
+  template:
+    metadata:
+        labels:
+          app: variadic_example
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: repl{{ ConfigOption "[[repl .nginx ]]" | ParseInt }}
+         
+ ```
