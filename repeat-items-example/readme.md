@@ -4,7 +4,7 @@ This is a sample application that shows an example of using [repeatable items](h
 
 In this example, we are using repeatable items to provide one or more ports to use for our `nginx` deployment as well as the corresponding `service`.
 
-First, we define our config fields per the documentation. Here is a snippet of the [config.yaml](manifests/config.yaml) https://github.com/replicatedhq/kotsapps/blob/repeat-items-example/repeat-items-example/manifests/config.yaml file:
+First, we define our config fields per the documentation. Here is a snippet of the [config.yaml](manifests/config.yaml) file:
 
 ```yaml
 
@@ -35,7 +35,7 @@ In the yaml above, we have defined two templates. Each one of these has a corres
 
 So to summarize, the definition in the `config.yaml` file is for one field that can be repeatable. The value(s) from this field will be populated in both a `deployment` and `service` manifests.
 
-Below is a snippet of the nginx deployment that has the templating needed to use the value from the repeatable items:
+Below is a snippet of the [nginx deployment](manifests/deployment.yaml) that has the templating needed to use the value from the repeatable items:
 
 ``` yaml
 
