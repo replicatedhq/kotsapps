@@ -73,12 +73,12 @@ Once you deploy the application, you will be able to define multiple instances o
 
 
 When we examine the files in the Admin Console we can see how it has assigned a name to each instance of the field.
-!(img/config-w-values.png)
+<p align="center"><img src="./img/config-w-values.png" width=600></img></p>
 
 Below is the `service.yaml` file templated with the ports listed.
-!(img/service-tempated.png)
+<p align="center"><img src="./img/service-tempated.png" width=600></img></p>
 
 When we describe the `pod` and the `service`, we can also see the ports:
-!(img/describe-service.png)
-!(img/describe-deployment.png)
+<p align="center"><img src="./img/describe-service.png" width=600></img></p>
+<p align="center"><img src="./img/describe-deployment.png" width=600></img></p>
 
