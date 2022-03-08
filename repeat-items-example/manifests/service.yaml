@@ -6,4 +6,4 @@ spec:
   type: NodePort
   ports:
   - port: repl{{ ConfigOption "[[repl .nginx ]]" | ParseInt }}
-    name: '{{repl ConfigOption "[[repl .nginx ]]" }}'
+    name: '[[repl .nginx ]]'
