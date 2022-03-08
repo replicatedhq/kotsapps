@@ -1,6 +1,6 @@
 <h1>Repeatable Items Example App</h1>
 
-This is a sample application that shows an example of using [repeatable items](https://docs.replicated.com/reference/custom-resource-config#repeatable-items).
+This is a sample application that shows an example of using [repeatable items](https://docs.replicated.com/reference/custom-resource-config#repeatable-items). 
 
 In this example, we are using repeatable items to provide one or more ports to use for our `nginx` deployment as well as the corresponding `service`.
 
@@ -29,6 +29,5 @@ First, we define our config fields per the documentation:
           valuesByGroup:
             nginx-deployments:
               nginx-port: "80"
-
 
 ```
