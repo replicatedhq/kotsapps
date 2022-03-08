@@ -1,4 +1,4 @@
-Repeatable Items Example App
+<h1>Repeatable Items Example App</h1>
 
 This is a sample application that shows an example of using [repeatable items](https://docs.replicated.com/reference/custom-resource-config#repeatable-items).
 
