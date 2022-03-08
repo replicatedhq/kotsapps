@@ -55,3 +55,16 @@ spec:
             - containerPort: repl{{ ConfigOption "[[repl .nginx ]]" | ParseInt }}
          
  ```
+ 
+ Here is the snippet for the [nodeport service](manifests/service.yaml). Note that in this one we use the random field name that is assigned to the instance of the field as the value for the `name` field.
+ 
+ ```yaml
+ spec:
+  type: NodePort
+  ports:
+  - port: repl{{ ConfigOption "[[repl .nginx ]]" | ParseInt }}
+    name: '[[repl .nginx ]]'
+ 
+ ```
+ 
+ 
