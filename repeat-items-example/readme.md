@@ -68,7 +68,7 @@ spec:
  ```
  
 Once you deploy the application, you will be able to define multiple instances of the NginX Port field. Below is a screenshot of a deployed app with several instances of the field with values populated.
-![img/fields-rendered-with-values.png]
+![/img/fields-rendered-with-values.png]
 
 When we examine the files in the Admin Console we can see how it has assigned a name to each instance of the field.
 !(img/config-w-values.png)
