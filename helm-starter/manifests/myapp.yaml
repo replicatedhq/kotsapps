@@ -1,0 +1,14 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: mychart
+spec:
+  chart:
+    name: mychart
+    chartVersion: 0.1.5
+  helmVersion: v3
+  useHelmInstall: true
+  weight: 0
+  values:
+   admin-console:
+     enabled: false
