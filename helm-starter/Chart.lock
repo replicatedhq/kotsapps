@@ -1,0 +1,6 @@
+dependencies:
+- name: admin-console
+  repository: oci://registry.replicated.com/library
+  version: 1.77.0
+digest: sha256:9df6b3da597d9b9d72f343564f2696063f3dad4a42019ac7f66f9c4294e11e22
+generated: "2022-07-22T16:49:16.370799-05:00"

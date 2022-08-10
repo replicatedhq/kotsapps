@@ -1,85 +1,54 @@
-Troubleshooting example: Multi-container Deployments
-========================
+# Replicated Troubleshoot
 
+Replicated Troubleshoot is a framework for collecting, redacting, and analyzing highly customizable diagnostic information about a Kubernetes cluster. Troubleshoot specs are created by 3rd-party application developers/maintainers and run by cluster operators in the initial and ongoing operation of those applications.
 
-This repo contains an example deployment and [troubleshoot.sh](https://troubleshoot.sh) Collector. It demonstrates collecting logs from a multi-container deployment with two `initContainer` entries and two `container` entries.
+Troubleshoot provides two CLI tools as kubectl plugins (using [Krew](https://krew.dev)): `kubectl preflight` and `kubectl support-bundle`. Preflight provides pre-installation cluster conformance testing and validation (preflight checks) and support-bundle provides post-installation troubleshooting and diagnostics (support bundles).
 
+## Preflight Checks
+Preflight checks are an easy-to-run set of conformance tests that can be written to verify that specific requirements in a cluster are met.
 
-### Testing
+To run a sample preflight check from a sample application, install the preflight kubectl plugin:
 
-Apply the deployment:
-
+```shell
+curl https://krew.sh/preflight | bash
 ```
-kubectl apply -f deployment.yaml
-```
-
-after a few seconds, run the support bundle
-
-```
-kubectl support-bundle support-bundle.yaml
-```
-
-Untar the bundle
-
-```
-tar xzvf support-bundle.tar.gz app-logs failing-app-logs
+ and run:
+ 
+```shell
+kubectl preflight https://preflight.replicated.com
 ```
 
+For more details on creating the custom resource files that drive preflight checks, visit [creating preflight checks](https://troubleshoot.sh/docs/preflight/introduction/).
 
 
-Review the healthy deployment logs
+## Support Bundle
+A support bundle is an archive that's created in-cluster, by collecting logs and cluster information, and executing specified commands (including redaction of sensitive information). After creating a support bundle, the cluster operator will normally deliver it to the 3rd-party application vendor for analysis and disconnected debugging. Another Replicated project, [KOTS](https://github.com/replicatedhq/kots), provides k8s apps an in-cluster UI for processing support bundles and viewing analyzers (as well as support bundle collection).
 
+To collect a sample support bundle, install the troubleshoot kubectl plugin:
+
+```shell
+curl https://krew.sh/support-bundle | bash
 ```
-tail app-logs/**/*
+ and run:
+ 
+```shell
+kubectl support-bundle https://support-bundle.replicated.com
 ```
+For more details on creating the custom resource files that drive support-bundle collection, visit [creating collectors](https://troubleshoot.sh/docs/collect/) and [creating analyzers](https://troubleshoot.sh/docs/analyze/).
 
-You should see something like
+# Community
 
-```
-==> app-logs/many-init-containers-d8b7b5b5b-gwp5d/first.log <==
-Sat Apr 11 18:08:30 UTC 2020 I'm First...
-first done
+For questions about using Troubleshoot, there's a [Replicated Community](https://help.replicated.com/community) forum, and a [#app-troubleshoot channel in Kubernetes Slack](https://kubernetes.slack.com/channels/app-troubleshoot).
 
-==> app-logs/many-init-containers-d8b7b5b5b-gwp5d/fourth.log <==
-Sat Apr 11 18:17:13 UTC 2020 fourth container waiting
-Sat Apr 11 18:17:23 UTC 2020 fourth container waiting
-Sat Apr 11 18:17:33 UTC 2020 fourth container waiting
+# Software Bill of Materials 
+A signed SBOM  that includes Troubleshoot dependencies is included in each release. 
+- **troubleshoot-sbom.tgz** contains a software bill of materials for Troubleshoot. 
+- **troubleshoot-sbom.tgz.sig** is the digital signature for troubleshoot-sbom.tgz
+- **key.pub** is the public key from the key pair used to sign troubleshoot-sbom.tgz
 
-==> app-logs/many-init-containers-d8b7b5b5b-gwp5d/second.log <==
-Sat Apr 11 18:08:41 UTC 2020 I'm Second
-second done
-
-==> app-logs/many-init-containers-d8b7b5b5b-gwp5d/third.log <==
-Sat Apr 11 18:17:12 UTC 2020 third container waiting
-Sat Apr 11 18:17:22 UTC 2020 third container waiting
-Sat Apr 11 18:17:32 UTC 2020 third container waiting
-Sat Apr 11 18:17:42 UTC 2020 third container waiting
-```
-
-Review the unhealthy deployment logs
-
-
-```
-tail failing-app-logs/**/*
-```
-
-You should see something like
-
-```
-==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/first.log <==
-Sat Apr 11 18:27:34 UTC 2020 I'm First...
-first done
-
-==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/second-previous.log <==
-Sat Apr 11 18:27:56 UTC 2020 I'm Second
-whoops, something broke!
-
-==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/second.log <==
-Sat Apr 11 18:28:22 UTC 2020 I'm Second
-
-
-==> failing-app-logs/failing-init-container-567c7d6db8-9wftq/third-errors.json <==
-[
-  "failed to get log stream: container \"third\" in pod \"failing-init-container-567c7d6db8-9wftq\" is waiting to start: PodInitializing"
-]
+The following example illustrates using [cosign](https://github.com/sigstore/cosign) to verify that **troubleshoot-sbom.tgz** has
+not been tampered with.
+```shell
+$ cosign verify-blob -key key.pub -signature troubleshoot-sbom.tgz.sig troubleshoot-sbom.tgz
+Verified OK
 ```
