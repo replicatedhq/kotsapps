@@ -8,9 +8,9 @@ spec:
         name: app-logs
         selector:
           - app=many-init-containers
-        namespace: default
+        namespace: tmp
     - logs:
         name: failing-app-logs
         selector:
           - app=failing-init-container
-        namespace: default
+        namespace: tmp

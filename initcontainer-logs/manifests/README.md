@@ -10,7 +10,7 @@ This repo contains an example deployment and [troubleshoot.sh](https://troublesh
 Apply the deployment:
 
 ```
-kubectl apply -f deployment.yaml
+kubectl apply -f deployment.yaml -n tmp
 ```
 
 after a few seconds, run the support bundle
