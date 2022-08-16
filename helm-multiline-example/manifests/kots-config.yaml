@@ -1,0 +1,14 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: config-sample
+spec:
+  groups:
+    - name: cert_settings
+      title: certs!
+      description: Example certs that demonstrate how to do the multiline thing
+      items:
+        - name: ingress_tls_cert
+          title: Ingress tls cert
+          help_text: it should probably be a cert but technically for this demo you can get away with any multiline file
+          type: file

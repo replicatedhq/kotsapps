@@ -1,0 +1,6 @@
+apiVersion: troubleshoot.replicated.com/v1beta1
+kind: SupportBundle
+metadata:
+  name: support-sample
+spec:
+  collectors: []
