@@ -1,0 +1,6 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: app-slug
+spec:
+  title: Helm Multiline Example

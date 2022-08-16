@@ -1,0 +1,20 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: mychart
+spec:
+  chart:
+    name: mychart
+    chartVersion: 0.1.5
+  helmVersion: v3
+  useHelmInstall: true
+  values:
+    multiline_files:
+      its_probably_files:
+        tls_cert: 'repl{{ ConfigOptionData "ingress_tls_cert" }}'
+        b64:
+          tls_cert: 'repl{{ ConfigOption "ingress_tls_cert" }}'
+        b64_2:
+          tls_cert: 'repl{{ ConfigOptionData "ingress_tls_cert" | Base64Encode }}'
+
+
